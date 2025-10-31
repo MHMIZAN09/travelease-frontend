@@ -5,12 +5,17 @@ import Footer from '../components/Footer';
 export default function MainLayout() {
   return (
     <div>
-      {/* navbar section  */}
-      <Navbar />
-      {/* banner section */}
-      <Outlet />
+      <div className="max-w-[1240px] mx-auto px-4">
+        {/* Navbar Section */}
+        <Navbar />
 
-      {/* footer section  */}
+        {/* Page Content */}
+        <main className="min-h-screen">
+          <Outlet />
+        </main>
+      </div>
+
+      {/* Footer Section */}
       <Footer />
     </div>
   );
