@@ -8,13 +8,11 @@ export default function MainLayout() {
       <div className="max-w-[1240px] mx-auto px-4">
         {/* Navbar Section */}
         <Navbar />
-
         {/* Page Content */}
         <main className="min-h-screen">
           <Outlet />
         </main>
       </div>
-
       {/* Footer Section */}
       <Footer />
     </div>
