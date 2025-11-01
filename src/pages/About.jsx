@@ -1,7 +1,11 @@
-import React from 'react';
+import SectionHeader from '../components/SectionHeader';
 
 function About() {
-  return <div>About</div>;
+  return (
+    <div>
+      <SectionHeader title={'mizan'} subtitle={'rahman'} />
+    </div>
+  );
 }
 
 export default About;

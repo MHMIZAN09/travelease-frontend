@@ -10,29 +10,31 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+    <footer className="bg-linear-to-b from-slate-900 via-slate-950 to-black text-gray-400">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
+        {/* Grid Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Company Info */}
           <div>
-            <h3 className="text-white mb-4 text-lg font-semibold">
+            <h3 className="text-white text-2xl font-bold mb-4 tracking-wide">
               TravelEase
             </h3>
-            <p className="text-sm mb-4">
-              Your trusted partner for exploring the natural beauty and heritage
-              of Bangladesh.
+            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+              Explore the beauty and culture of Bangladesh with comfort and
+              confidence. TravelEase is your trusted companion for unforgettable
+              journeys.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-blue-400 transition-colors">
+              <a href="#" className="hover:text-emerald-400 transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">
+              <a href="#" className="hover:text-sky-400 transition-colors">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-pink-400 transition-colors">
+              <a href="#" className="hover:text-pink-500 transition-colors">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-red-400 transition-colors">
+              <a href="#" className="hover:text-red-500 transition-colors">
                 <Youtube className="h-5 w-5" />
               </a>
             </div>
@@ -40,81 +42,65 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white mb-4 font-semibold">Quick Links</h4>
+            <h4 className="text-white text-lg font-semibold mb-4 border-b border-emerald-500 inline-block pb-1">
+              Quick Links
+            </h4>
             <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Destinations
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Packages
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Contact
-                </a>
-              </li>
+              {['About Us', 'Destinations', 'Packages', 'Blog', 'Contact'].map(
+                (item) => (
+                  <li key={item}>
+                    <a
+                      href="#"
+                      className="hover:text-emerald-400 transition-colors"
+                    >
+                      {item}
+                    </a>
+                  </li>
+                )
+              )}
             </ul>
           </div>
 
           {/* Support */}
           <div>
-            <h4 className="text-white mb-4 font-semibold">Support</h4>
+            <h4 className="text-white text-lg font-semibold mb-4 border-b border-emerald-500 inline-block pb-1">
+              Support
+            </h4>
             <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Cancellation Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  FAQs
-                </a>
-              </li>
+              {[
+                'Help Center',
+                'Privacy Policy',
+                'Terms of Service',
+                'Cancellation Policy',
+                'FAQs',
+              ].map((item) => (
+                <li key={item}>
+                  <a
+                    href="#"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
+                    {item}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="text-white mb-4 font-semibold">Contact Us</h4>
+            <h4 className="text-white text-lg font-semibold mb-4 border-b border-emerald-500 inline-block pb-1">
+              Contact Us
+            </h4>
             <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-2">
+              <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-emerald-400 mt-0.5" />
                 <span>House 45, Road 12, Banani, Dhaka 1213, Bangladesh</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-emerald-400" />
-                <span>+880 1759256744</span>
+                <span>+880 1759-256744</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-emerald-400" />
                 <span>info@travelease.com</span>
               </li>
@@ -122,10 +108,12 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8 text-center text-sm">
-          <p>
-            &copy; 2025 TravelEase. All rights reserved. | Trade License:
-            TRAD/DSCC/123456/2024
+        {/* Divider */}
+        <div className="border-t border-slate-800 pt-8 text-center">
+          <p className="text-sm text-gray-500">
+            &copy; {new Date().getFullYear()}{' '}
+            <span className="text-emerald-400 font-semibold">TravelEase</span>.
+            All rights reserved. | Trade License: TRAD/DSCC/123456/2024
           </p>
         </div>
       </div>

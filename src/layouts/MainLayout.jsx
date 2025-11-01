@@ -4,16 +4,18 @@ import Footer from '../components/Footer';
 
 export default function MainLayout() {
   return (
-    <div>
-      <div className="max-w-[1240px] mx-auto px-4">
-        {/* Navbar Section */}
-        <Navbar />
-        {/* Page Content */}
-        <main className="min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Page Content */}
+      <main className="grow">
+        <div className="max-w-7xl mx-auto px-6 py-8">
           <Outlet />
-        </main>
-      </div>
-      {/* Footer Section */}
+        </div>
+      </main>
+
+      {/* Footer */}
       <Footer />
     </div>
   );
