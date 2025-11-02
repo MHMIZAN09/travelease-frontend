@@ -1,0 +1,78 @@
+[
+  {
+    "id": 1,
+    "name": "Cox's Bazar",
+    "slug": "coxs-bazar",
+    "division": "Chittagong Division",
+    "image": "https://images.unsplash.com/photo-1658139657766-3ba1adc5a010?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3glMjBiYXphciUyMGJlYWNoJTIwYmFuZ2xhZGVzaHxlbnwxfHx8fDE3NjA5NjYyNTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "packages": 28,
+    "rating": 4.9,
+    "description": "World's longest natural sea beach stretching 120 km"
+  },
+  {
+    "id": 2,
+    "name": "Sundarbans",
+    "slug": "sundarbans",
+    "division": "Khulna Division",
+    "image": "https://images.unsplash.com/photo-1746959197922-3c097c0a4e6e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdW5kYXJiYW5zJTIwbWFuZ3JvdmUlMjBmb3Jlc3R8ZW58MXx8fHwxNzYwOTY2MjU3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "packages": 15,
+    "rating": 4.8,
+    "description": "UNESCO World Heritage site and largest mangrove forest"
+  },
+  {
+    "id": 3,
+    "name": "Sylhet",
+    "slug": "sylhet",
+    "division": "Sylhet Division",
+    "image": "https://images.unsplash.com/photo-1667120205301-a2a3a886886e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWElMjBnYXJkZW4lMjBzeWxoZXR8ZW58MXx8fHwxNzYwOTY2MjU3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "packages": 24,
+    "rating": 4.7,
+    "description": "Land of two leaves and a bud - Famous tea gardens"
+  },
+  {
+    "id": 4,
+    "name": "Bandarban",
+    "slug": "bandarban",
+    "division": "Chittagong Division",
+    "image": "https://images.unsplash.com/photo-1688450528046-1158865e88b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYW5kYXJiYW4lMjBoaWxscyUyMGJhbmdsYWRlc2h8ZW58MXx8fHwxNzYwOTY2MjU3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "packages": 32,
+    "rating": 4.9,
+    "description": "Hill district with stunning mountain landscapes and tribal culture"
+  },
+  {
+    "id": 5,
+    "name": "Saint Martin's Island",
+    "division": "Chittagong Division",
+    "image": "https://images.unsplash.com/photo-1636903756822-11b3176e28f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzYWludCUyMG1hcnRpbiUyMGlzbGFuZHxlbnwxfHx8fDE3NjA5NjYyNTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "packages": 18,
+    "rating": 5.0,
+    "description": "Only coral island of Bangladesh with pristine beaches"
+  },
+  {
+    "id": 6,
+    "name": "Rangamati",
+    "division": "Chittagong Division",
+    "image": "https://images.unsplash.com/photo-1645986211795-dac0f5987dd6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYW5nYW1hdGklMjBsYWtlJTIwYmFuZ2xhZGVzaHxlbnwxfHx8fDE3NjA5NjYyNjF8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "packages": 21,
+    "rating": 4.8,
+    "description": "Lake city with hanging bridge and tribal heritage"
+  },
+  {
+    "id": 7,
+    "name": "Kuakata",
+    "division": "Barisal Division",
+    "image": "https://images.unsplash.com/photo-1611431114750-2c3bc36982d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxrdWFrYXRhJTIwYmVhY2glMjBzdW5zZXR8ZW58MXx8fHwxNzYwOTY2MjYxfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "packages": 16,
+    "rating": 4.7,
+    "description": "Daughter of the sea - Panoramic sea beach for sunrise & sunset"
+  },
+  {
+    "id": 8,
+    "name": "Srimangal",
+    "division": "Sylhet Division",
+    "image": "https://images.unsplash.com/photo-1699705610933-bdce2a7e2cee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcmltYW5nYWwlMjB0ZWElMjBlc3RhdGV8ZW58MXx8fHwxNzYwOTY2MjYxfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "packages": 22,
+    "rating": 4.8,
+    "description": "Tea capital of Bangladesh with lush green gardens"
+  }
+]

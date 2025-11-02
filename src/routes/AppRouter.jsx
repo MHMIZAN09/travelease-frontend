@@ -6,6 +6,8 @@ import About from '../pages/About';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Contact from '../pages/Contact';
+import Packages from '../pages/Packages';
+import Destinations from './../pages/Destinations';
 
 const route = createBrowserRouter([
   {
@@ -31,6 +33,14 @@ const route = createBrowserRouter([
       {
         path: 'contact',
         element: <Contact />,
+      },
+      {
+        path: 'package',
+        element: <Packages />,
+      },
+      {
+        path: 'destination',
+        element: <Destinations />,
       },
     ],
   },

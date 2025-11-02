@@ -1,11 +1,7 @@
 import SectionHeader from '../components/SectionHeader';
 
 function About() {
-  return (
-    <div>
-      <SectionHeader title={'mizan'} subtitle={'rahman'} />
-    </div>
-  );
+  return <div>about</div>;
 }
 
 export default About;
