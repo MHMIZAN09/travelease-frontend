@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { FaFacebook } from 'react-icons/fa';
+import { FaFacebook, FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
@@ -87,7 +87,7 @@ export default function Login() {
             </button>
 
             <button className="btn btn-outline w-full flex items-center gap-2">
-              <FaFacebook className="text-lg text-blue-600" /> Facebook
+              <FaGithub className="text-lg text-blue-600" /> GitHub
             </button>
           </div>
 
