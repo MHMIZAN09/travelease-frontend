@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { AuthContext } from './provider/AuthProvider'; // adjust path
+import { AuthContext } from './provider/AuthProvider';
 import { FiLogOut } from 'react-icons/fi';
 
 export default function Navbar() {
@@ -16,66 +16,101 @@ export default function Navbar() {
     }
   };
 
-  const links = (
+  // Helper for NavLink active class
+  const getLinkClass = ({ isActive }) =>
+    isActive
+      ? 'text-emerald-600 font-semibold'
+      : 'hover:text-emerald-500 transition-colors duration-200';
+
+  // Public links
+  const publicLinks = (
     <>
       <li>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive
-              ? 'text-emerald-600 font-semibold'
-              : 'hover:text-emerald-500 transition-colors duration-200'
-          }
-        >
+        <NavLink to="/" className={getLinkClass}>
           Home
         </NavLink>
       </li>
       <li>
-        <NavLink
-          to="/destination"
-          className={({ isActive }) =>
-            isActive
-              ? 'text-emerald-600 font-semibold'
-              : 'hover:text-emerald-500 transition-colors duration-200'
-          }
-        >
+        <NavLink to="/destination" className={getLinkClass}>
           Destinations
         </NavLink>
       </li>
       <li>
-        <NavLink
-          to="/package"
-          className={({ isActive }) =>
-            isActive
-              ? 'text-emerald-600 font-semibold'
-              : 'hover:text-emerald-500 transition-colors duration-200'
-          }
-        >
+        <NavLink to="/package" className={getLinkClass}>
           Packages
         </NavLink>
       </li>
       <li>
-        <NavLink
-          to="/about"
-          className={({ isActive }) =>
-            isActive
-              ? 'text-emerald-600 font-semibold'
-              : 'hover:text-emerald-500 transition-colors duration-200'
-          }
-        >
+        <NavLink to="/about" className={getLinkClass}>
           About
         </NavLink>
       </li>
       <li>
+        <NavLink to="/contact" className={getLinkClass}>
+          Contact
+        </NavLink>
+      </li>
+    </>
+  );
+
+  // Logged-in user links
+  const userLinks = (
+    <>
+      <li>
+        <NavLink to="/dashboard" className={getLinkClass}>
+          Dashboard
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/bookings" className={getLinkClass}>
+          My Bookings
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/profile" className={getLinkClass}>
+          Profile
+        </NavLink>
+      </li>
+    </>
+  );
+
+  // Admin links
+  const adminLinks = (
+    <>
+      <li>
         <NavLink
-          to="/contact"
+          to="/admin/dashboard"
           className={({ isActive }) =>
             isActive
-              ? 'text-emerald-600 font-semibold'
-              : 'hover:text-emerald-500 transition-colors duration-200'
+              ? 'text-red-600 font-semibold'
+              : 'hover:text-red-500 transition-colors duration-200'
           }
         >
-          Contact
+          Admin Dashboard
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/admin/users"
+          className={({ isActive }) =>
+            isActive
+              ? 'text-red-600 font-semibold'
+              : 'hover:text-red-500 transition-colors duration-200'
+          }
+        >
+          Manage Users
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/admin/packages"
+          className={({ isActive }) =>
+            isActive
+              ? 'text-red-600 font-semibold'
+              : 'hover:text-red-500 transition-colors duration-200'
+          }
+        >
+          Manage Packages
         </NavLink>
       </li>
     </>
@@ -83,8 +118,8 @@ export default function Navbar() {
 
   return (
     <div className="navbar bg-base-100 shadow-md px-4 sticky top-0 z-50">
+      {/* Navbar Start */}
       <div className="navbar-start">
-        {/* Mobile Dropdown */}
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
             <svg
@@ -106,7 +141,8 @@ export default function Navbar() {
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            {links}
+            {publicLinks}
+            {user && (user?.role === 'admin' ? adminLinks : userLinks)}
             {user && (
               <li>
                 <button
@@ -128,12 +164,15 @@ export default function Navbar() {
         </NavLink>
       </div>
 
-      {/* Center Links */}
+      {/* Navbar Center */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 space-x-2">{links}</ul>
+        <ul className="menu menu-horizontal px-1 space-x-2">
+          {publicLinks}
+          {user && (user?.role === 'admin' ? adminLinks : userLinks)}
+        </ul>
       </div>
 
-      {/* Right Side: User Avatar / Login */}
+      {/* Navbar End */}
       <div className="navbar-end">
         {user ? (
           <div className="dropdown dropdown-end">
@@ -141,10 +180,9 @@ export default function Navbar() {
               tabIndex={0}
               className="flex items-center gap-2 cursor-pointer"
             >
-              {/* Use default avatar if photoURL is null */}
               <img
                 src={user.photoURL || '/default-avatar.png'}
-                alt={user.displayName || 'User Avatar'}
+                alt={user.displayName || 'User'}
                 className="w-10 h-10 rounded-full object-cover"
               />
             </label>

@@ -48,6 +48,18 @@ export default function Register() {
       return;
     }
     console.log(name, email, password);
+
+    createUser(email, password)
+      .then((result) => {
+        const createdUser = result.user;
+        console.log(createdUser);
+        toast.success('Registration successful!');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.error('Registration Error:', error);
+        toast.error(`Registration Error: ${error.message}`);
+      });
   };
 
   // Google Login
