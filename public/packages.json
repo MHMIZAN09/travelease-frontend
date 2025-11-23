@@ -1,0 +1,113 @@
+[
+  {
+    "title": "Cox's Bazar Family Tour",
+    "destination": "64f1f5c6e1f2c4a1b2d34567",
+    "category": "Family",
+    "description": "5-day family tour to Cox's Bazar including beach activities and local sightseeing.",
+    "overview": "Relaxing trip with beach and cultural visits",
+    "images": [
+      "https://example.com/images/package1_1.jpg",
+      "https://example.com/images/package1_2.jpg"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival & Beach Visit",
+        "description": "Check-in and visit Laboni Beach."
+      },
+      {
+        "day": 2,
+        "title": "Inani Beach",
+        "description": "Day trip to Inani Beach."
+      }
+    ],
+    "inclusions": ["Hotel stay", "Meals", "Transport"],
+    "exclusions": ["Airfare", "Personal Expenses"],
+    "price": 500,
+    "discountedPrice": 450,
+    "availability": {
+      "startDate": "2025-01-01",
+      "endDate": "2025-12-31",
+      "slots": 20
+    },
+    "policies": {
+      "cancellation": "24h notice",
+      "refund": "Full refund before 7 days"
+    },
+    "rating": 4.5,
+    "totalReviews": 120,
+    "status": "active"
+  },
+  {
+    "title": "Sundarbans Adventure Trip",
+    "destination": "64f1f5c6e1f2c4a1b2d34568",
+    "category": "Adventure",
+    "description": "3-day Sundarbans boat safari to explore wildlife and nature.",
+    "overview": "Wildlife adventure with experienced guides",
+    "images": ["https://example.com/images/package2_1.jpg"],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival & Orientation",
+        "description": "Reach Khulna and brief orientation."
+      },
+      {
+        "day": 2,
+        "title": "Boat Safari",
+        "description": "Full-day safari to explore mangroves and tigers."
+      }
+    ],
+    "inclusions": ["Boat Ride", "Meals", "Guide"],
+    "exclusions": ["Travel Insurance", "Souvenirs"],
+    "price": 350,
+    "discountedPrice": 300,
+    "availability": {
+      "startDate": "2025-02-01",
+      "endDate": "2025-12-31",
+      "slots": 15
+    },
+    "policies": {
+      "cancellation": "48h notice",
+      "refund": "50% refund before 5 days"
+    },
+    "rating": 4.8,
+    "totalReviews": 90,
+    "status": "active"
+  },
+  {
+    "title": "Srimangal Tea Tour",
+    "destination": "64f1f5c6e1f2c4a1b2d34569",
+    "category": "Luxury",
+    "description": "Luxury 4-day trip to Srimangal with tea garden tours and forest walks.",
+    "overview": "Relax in tea plantations and explore the rainforest",
+    "images": ["https://example.com/images/package3_1.jpg"],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival",
+        "description": "Check-in at luxury resort."
+      },
+      {
+        "day": 2,
+        "title": "Tea Garden Tour",
+        "description": "Visit famous tea gardens and factories."
+      }
+    ],
+    "inclusions": ["Luxury Stay", "Breakfast", "Transport"],
+    "exclusions": ["Lunch/Dinner outside package", "Souvenirs"],
+    "price": 600,
+    "discountedPrice": 550,
+    "availability": {
+      "startDate": "2025-03-01",
+      "endDate": "2025-12-31",
+      "slots": 10
+    },
+    "policies": {
+      "cancellation": "72h notice",
+      "refund": "Full refund before 10 days"
+    },
+    "rating": 4.9,
+    "totalReviews": 60,
+    "status": "active"
+  }
+]

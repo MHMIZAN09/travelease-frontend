@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from './provider/AuthProvider';
 import { FiLogOut } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
@@ -11,7 +12,9 @@ export default function Navbar() {
     try {
       await logout();
       navigate('/login');
+      toast.success('Logged out successfully!');
     } catch (error) {
+      toast.error('Logout Failed. Please try again.');
       console.error('Logout Error:', error);
     }
   };
@@ -48,6 +51,11 @@ export default function Navbar() {
       <li>
         <NavLink to="/contact" className={getLinkClass}>
           Contact
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/addDestination" className={getLinkClass}>
+          Add Destination
         </NavLink>
       </li>
     </>

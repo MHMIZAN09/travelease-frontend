@@ -1,78 +1,211 @@
 [
   {
-    "id": 1,
     "name": "Cox's Bazar",
-    "slug": "coxs-bazar",
-    "division": "Chittagong Division",
+    "division": "Chattogram",
     "image": "https://images.unsplash.com/photo-1658139657766-3ba1adc5a010?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3glMjBiYXphciUyMGJlYWNoJTIwYmFuZ2xhZGVzaHxlbnwxfHx8fDE3NjA5NjYyNTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "packages": 28,
-    "rating": 4.9,
-    "description": "World's longest natural sea beach stretching 120 km"
+    "description": "Cox's Bazar is famous for having the longest natural sea beach in the world.",
+    "attractions": ["Inani Beach", "Himchari", "Laboni Beach"],
+    "bestTime": "November to March",
+    "howToReach": "By bus or flight from Dhaka",
+    "tags": ["beach", "tourism", "nature"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34567"
   },
   {
-    "id": 2,
     "name": "Sundarbans",
-    "slug": "sundarbans",
-    "division": "Khulna Division",
+    "division": "Khulna",
     "image": "https://images.unsplash.com/photo-1746959197922-3c097c0a4e6e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdW5kYXJiYW5zJTIwbWFuZ3JvdmUlMjBmb3Jlc3R8ZW58MXx8fHwxNzYwOTY2MjU3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "packages": 15,
-    "rating": 4.8,
-    "description": "UNESCO World Heritage site and largest mangrove forest"
+    "description": "Largest mangrove forest in the world and home to the Royal Bengal Tiger.",
+    "attractions": ["Boat Safari", "Wildlife Watching", "Mangrove Forest"],
+    "bestTime": "October to March",
+    "howToReach": "By boat from Khulna or Mongla",
+    "tags": ["forest", "wildlife", "adventure"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34568"
   },
   {
-    "id": 3,
-    "name": "Sylhet",
-    "slug": "sylhet",
-    "division": "Sylhet Division",
-    "image": "https://images.unsplash.com/photo-1667120205301-a2a3a886886e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWElMjBnYXJkZW4lMjBzeWxoZXR8ZW58MXx8fHwxNzYwOTY2MjU3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "packages": 24,
-    "rating": 4.7,
-    "description": "Land of two leaves and a bud - Famous tea gardens"
-  },
-  {
-    "id": 4,
-    "name": "Bandarban",
-    "slug": "bandarban",
-    "division": "Chittagong Division",
-    "image": "https://images.unsplash.com/photo-1688450528046-1158865e88b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYW5kYXJiYW4lMjBoaWxscyUyMGJhbmdsYWRlc2h8ZW58MXx8fHwxNzYwOTY2MjU3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "packages": 32,
-    "rating": 4.9,
-    "description": "Hill district with stunning mountain landscapes and tribal culture"
-  },
-  {
-    "id": 5,
-    "name": "Saint Martin's Island",
-    "division": "Chittagong Division",
-    "image": "https://images.unsplash.com/photo-1636903756822-11b3176e28f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzYWludCUyMG1hcnRpbiUyMGlzbGFuZHxlbnwxfHx8fDE3NjA5NjYyNTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "packages": 18,
-    "rating": 5.0,
-    "description": "Only coral island of Bangladesh with pristine beaches"
-  },
-  {
-    "id": 6,
-    "name": "Rangamati",
-    "division": "Chittagong Division",
-    "image": "https://images.unsplash.com/photo-1645986211795-dac0f5987dd6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYW5nYW1hdGklMjBsYWtlJTIwYmFuZ2xhZGVzaHxlbnwxfHx8fDE3NjA5NjYyNjF8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "packages": 21,
-    "rating": 4.8,
-    "description": "Lake city with hanging bridge and tribal heritage"
-  },
-  {
-    "id": 7,
-    "name": "Kuakata",
-    "division": "Barisal Division",
-    "image": "https://images.unsplash.com/photo-1611431114750-2c3bc36982d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxrdWFrYXRhJTIwYmVhY2glMjBzdW5zZXR8ZW58MXx8fHwxNzYwOTY2MjYxfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "packages": 16,
-    "rating": 4.7,
-    "description": "Daughter of the sea - Panoramic sea beach for sunrise & sunset"
-  },
-  {
-    "id": 8,
     "name": "Srimangal",
-    "division": "Sylhet Division",
-    "image": "https://images.unsplash.com/photo-1699705610933-bdce2a7e2cee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcmltYW5nYWwlMjB0ZWElMjBlc3RhdGV8ZW58MXx8fHwxNzYwOTY2MjYxfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "packages": 22,
-    "rating": 4.8,
-    "description": "Tea capital of Bangladesh with lush green gardens"
+    "division": "Sylhet",
+    "image": "https://example.com/images/srimangal.jpg",
+    "description": "Famous for tea gardens and the Lawachara National Park.",
+    "attractions": ["Tea Gardens", "Lawachara Forest", "Rainforest Walk"],
+    "bestTime": "September to February",
+    "howToReach": "By train or bus from Dhaka",
+    "tags": ["nature", "tea", "relaxation"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34569"
+  },
+  {
+    "name": "Sajek Valley",
+    "division": "Rangamati",
+    "image": "https://example.com/images/sajek.jpg",
+    "description": "Hilly area with scenic views of rivers and hills.",
+    "attractions": ["Sunset Point", "Hilly Landscape", "Local Culture"],
+    "bestTime": "October to March",
+    "howToReach": "By bus or car from Khagrachhari",
+    "tags": ["hills", "adventure", "nature"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d3456a"
+  },
+  {
+    "name": "Saint Martin's Island",
+    "division": "Chattogram",
+    "image": "https://example.com/images/saintmartin.jpg",
+    "description": "Small coral island in the Bay of Bengal, popular for its beach and marine life.",
+    "attractions": ["Coral Beach", "Snorkeling", "Seafood Market"],
+    "bestTime": "November to February",
+    "howToReach": "By boat from Teknaf",
+    "tags": ["island", "beach", "marine life"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d3456b"
+  },
+  {
+    "name": "Rangamati Lake",
+    "division": "Rangamati",
+    "image": "https://example.com/images/rangamati.jpg",
+    "description": "Beautiful lake surrounded by hills and tribal villages.",
+    "attractions": ["Boat Ride", "Hanging Bridge", "Local Markets"],
+    "bestTime": "October to March",
+    "howToReach": "By bus or car from Chattogram",
+    "tags": ["lake", "nature", "hills"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d3456c"
+  },
+  {
+    "name": "Paharpur",
+    "division": "Rajshahi",
+    "image": "https://example.com/images/paharpur.jpg",
+    "description": "UNESCO World Heritage Site famous for ancient Buddhist monastery ruins.",
+    "attractions": ["Somapura Mahavihara", "Archaeological Museum"],
+    "bestTime": "October to March",
+    "howToReach": "By train or bus from Dhaka",
+    "tags": ["heritage", "history", "culture"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d3456d"
+  },
+  {
+    "name": "Kuakata",
+    "division": "Patuakhali",
+    "image": "https://example.com/images/kuakata.jpg",
+    "description": "Sea beach where both sunrise and sunset can be seen.",
+    "attractions": ["Kuakata Beach", "Rakhine Village"],
+    "bestTime": "November to February",
+    "howToReach": "By bus from Dhaka",
+    "tags": ["beach", "sunrise", "sunset"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d3456e"
+  },
+  {
+    "name": "Jaflong",
+    "division": "Sylhet",
+    "image": "https://example.com/images/jaflong.jpg",
+    "description": "Hill-side tourist spot with stone collection points by the river.",
+    "attractions": ["River Walk", "Hills", "Stone Market"],
+    "bestTime": "October to March",
+    "howToReach": "By car or bus from Sylhet",
+    "tags": ["hills", "river", "nature"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d3456f"
+  },
+  {
+    "name": "Bandarban",
+    "division": "Bandarban",
+    "image": "https://example.com/images/bandarban.jpg",
+    "description": "Hilly region famous for trekking, waterfalls, and tribal culture.",
+    "attractions": ["Nilgiri", "Sangu River", "Shuvolong Waterfall"],
+    "bestTime": "October to March",
+    "howToReach": "By bus or car from Chattogram",
+    "tags": ["hills", "trekking", "adventure"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34570"
+  },
+  {
+    "name": "Mahasthangarh",
+    "division": "Bogura",
+    "image": "https://example.com/images/mahasthangarh.jpg",
+    "description": "Ancient archaeological site of Bengal.",
+    "attractions": ["Ruins", "Museum"],
+    "bestTime": "October to March",
+    "howToReach": "By bus from Dhaka",
+    "tags": ["heritage", "history", "archaeology"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34571"
+  },
+  {
+    "name": "Paharpur National Park",
+    "division": "Rajshahi",
+    "image": "https://example.com/images/paharpurnational.jpg",
+    "description": "Scenic forested area with wildlife.",
+    "attractions": ["Forest Walk", "Bird Watching"],
+    "bestTime": "October to February",
+    "howToReach": "By bus from Dhaka",
+    "tags": ["forest", "nature", "adventure"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34572"
+  },
+  {
+    "name": "Saint Martin Snorkeling",
+    "division": "Chattogram",
+    "image": "https://example.com/images/saintmartinsnorkel.jpg",
+    "description": "Popular island for snorkeling and coral reef exploration.",
+    "attractions": ["Snorkeling", "Boat Ride", "Sunset Beach"],
+    "bestTime": "November to February",
+    "howToReach": "By boat from Teknaf",
+    "tags": ["island", "beach", "adventure"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d3456b"
+  },
+  {
+    "name": "Sylhet Tea Hills",
+    "division": "Sylhet",
+    "image": "https://example.com/images/sylhet_tea.jpg",
+    "description": "Famous for rolling tea plantations and scenic views.",
+    "attractions": ["Tea Tours", "Hiking"],
+    "bestTime": "September to February",
+    "howToReach": "By train or bus from Dhaka",
+    "tags": ["tea", "nature", "hills"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34569"
+  },
+  {
+    "name": "Chittagong Hill Tracts",
+    "division": "Chattogram",
+    "image": "https://example.com/images/chittagong_hills.jpg",
+    "description": "Scenic hills with rivers, waterfalls, and tribal villages.",
+    "attractions": ["Trekking", "Waterfalls", "Cultural Tours"],
+    "bestTime": "October to March",
+    "howToReach": "By bus from Chattogram",
+    "tags": ["hills", "adventure", "nature"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d3456a"
+  },
+  {
+    "name": "Kuakata Sunset",
+    "division": "Patuakhali",
+    "image": "https://example.com/images/kuakata_sunset.jpg",
+    "description": "Famous for stunning sunset views over the Bay of Bengal.",
+    "attractions": ["Beach Walk", "Sunset Point"],
+    "bestTime": "November to February",
+    "howToReach": "By bus from Dhaka",
+    "tags": ["beach", "sunset", "relaxation"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d3456e"
+  },
+  {
+    "name": "Lawachara National Park",
+    "division": "Sylhet",
+    "image": "https://example.com/images/lawachara.jpg",
+    "description": "Rainforest reserve famous for wildlife and bird watching.",
+    "attractions": ["Rainforest Trek", "Wildlife Watching"],
+    "bestTime": "October to March",
+    "howToReach": "By car from Sylhet",
+    "tags": ["forest", "wildlife", "nature"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34569"
+  },
+  {
+    "name": "Nilgiri Hill",
+    "division": "Bandarban",
+    "image": "https://example.com/images/nilgiri.jpg",
+    "description": "Popular trekking destination with scenic sunrise views.",
+    "attractions": ["Trekking", "Sunrise Point"],
+    "bestTime": "October to March",
+    "howToReach": "By bus or car from Bandarban",
+    "tags": ["hills", "trekking", "adventure"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34570"
+  },
+  {
+    "name": "Shuvolong Waterfall",
+    "division": "Bandarban",
+    "image": "https://example.com/images/shuvolong.jpg",
+    "description": "Scenic waterfall surrounded by hills.",
+    "attractions": ["Waterfall Visit", "Photography Spot"],
+    "bestTime": "October to March",
+    "howToReach": "By local transport from Bandarban",
+    "tags": ["waterfall", "hills", "nature"],
+    "createdBy": "64f1f5c6e1f2c4a1b2d34570"
   }
 ]
