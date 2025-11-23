@@ -113,28 +113,19 @@ export default function Destinations() {
             <DestinationCard key={dest.id || dest._id} destination={dest} />
           ))
         ) : (
-          <div className="col-span-full flex flex-col justify-center items-center p-10 bg-white shadow-md rounded-lg border border-gray-200">
+          <div className="col-span-full flex flex-col justify-center items-center text-center p-8 bg-white rounded-lg shadow">
             <img
               src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
-              alt="No destinations"
-              className="w-32 h-32 mb-6 animate-pulse"
+              alt="No results"
+              className="w-32 h-32 mb-4 opacity-50"
             />
-            <h3 className="text-2xl font-semibold text-gray-700 mb-2">
-              No Destinations Found
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">
+              No destinations match your search/filter
             </h3>
-            <p className="text-gray-500 text-center mb-4 max-w-sm">
-              We couldn't find any destinations that match your search or filter
-              criteria. Try adjusting your filters or clearing the search.
+            <p className="text-gray-500 max-w-sm">
+              Try adjusting your search or filter options to find the perfect
+              destination.
             </p>
-            <button
-              className="px-5 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition"
-              onClick={() => {
-                setSearchTerm('');
-                setFilterDivision('');
-              }}
-            >
-              Clear Filters
-            </button>
           </div>
         )}
       </div>
