@@ -7,7 +7,10 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Contact from '../pages/Contact';
 import Packages from '../pages/Packages';
-import Destinations from './../pages/Destinations';
+
+import CreateDestination from '../pages/admin/CreateDestination';
+import DestinationsPage from '../pages/DestinationsPage';
+import CreatePackageForm from '../pages/admin/CreatePackage';
 
 const route = createBrowserRouter([
   {
@@ -40,7 +43,15 @@ const route = createBrowserRouter([
       },
       {
         path: 'destination',
-        element: <Destinations />,
+        element: <DestinationsPage />,
+      },
+      {
+        path: 'addDestination',
+        element: <CreateDestination />,
+      },
+      {
+        path: 'admin/createPackage',
+        element: <CreatePackageForm />,
       },
     ],
   },
