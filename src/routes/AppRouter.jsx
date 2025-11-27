@@ -11,6 +11,8 @@ import Packages from '../pages/Packages';
 import CreateDestination from '../pages/admin/CreateDestination';
 import DestinationsPage from '../pages/DestinationsPage';
 import CreatePackageForm from '../pages/admin/CreatePackage';
+import PackagesByDestination from '../pages/PackagesByDestination';
+import PackageDetails from '../pages/PackageDetails';
 
 const route = createBrowserRouter([
   {
@@ -52,6 +54,14 @@ const route = createBrowserRouter([
       {
         path: 'admin/createPackage',
         element: <CreatePackageForm />,
+      },
+      {
+        path: 'packages/destination/:destinationId',
+        element: <PackagesByDestination />,
+      },
+      {
+        path: 'packages/:id',
+        element: <PackageDetails />,
       },
     ],
   },

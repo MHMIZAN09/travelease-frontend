@@ -79,7 +79,9 @@ export default function DestinationCard({ destination }) {
             {destination.packages} packages
           </span>
           <span className="text-emerald-600 font-semibold">
-            <Link to={`/destinations/${destination.name}`}>View Details</Link>
+            <Link to={`/packages/destination/${destination._id}`}>
+              View All Packages
+            </Link>
           </span>
         </div>
       </div>

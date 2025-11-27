@@ -13,11 +13,14 @@ export default function Destinations() {
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        const response = await axios.get('../../public/destinations.json');
+        const response = await axios.get(
+          'http://localhost:3000/api/v1/destinations'
+        );
         const data = Array.isArray(response.data)
           ? response.data
           : response.data.destinations;
         setDestinations(data || []);
+        console.log('Fetched destinations:', data);
       } catch (error) {
         toast.error('Failed to fetch destinations. Please try again later.');
         console.error(error);

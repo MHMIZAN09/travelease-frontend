@@ -1,5 +1,6 @@
 import { Mail, Phone, MapPin, Clock, Send, MessageCircle } from 'lucide-react';
 import ContactMap from './ContactMap';
+import { SectionTitle } from '../components/SectionTitle';
 
 export default function Contact() {
   const ContactList = [
@@ -59,7 +60,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-linear-to-r from-emerald-600 to-teal-600 text-white py-20 shadow-inner rounded-lg">
+      {/* <section className="bg-linear-to-r from-emerald-600 to-teal-600 text-white py-20 shadow-inner rounded-lg">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-4xl font-bold mb-4">Get in Touch</h1>
           <p className="text-lg max-w-2xl mx-auto text-emerald-100">
@@ -67,7 +68,11 @@ export default function Contact() {
             you every step of the way.
           </p>
         </div>
-      </section>
+      </section> */}
+      <SectionTitle
+        title="Contact Us"
+        description="We're here to help. Reach out to us through any of the following ways."
+      />
 
       {/* Contact Form & Info */}
       <section className="py-16">

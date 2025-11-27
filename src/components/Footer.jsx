@@ -113,7 +113,7 @@ export default function Footer() {
           <p className="text-sm text-gray-500">
             &copy; {new Date().getFullYear()}{' '}
             <span className="text-emerald-400 font-semibold">TravelEase</span>.
-            All rights reserved. | Trade License: TRAD/DSCC/123456/2024
+            All rights reserved.
           </p>
         </div>
       </div>

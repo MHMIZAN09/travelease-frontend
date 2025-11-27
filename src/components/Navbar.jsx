@@ -174,10 +174,7 @@ export default function Navbar() {
 
       {/* Navbar Center */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 space-x-2">
-          {publicLinks}
-          {user && (user?.role === 'admin' ? adminLinks : userLinks)}
-        </ul>
+        <ul className="menu menu-horizontal px-1 space-x-2">{publicLinks}</ul>
       </div>
 
       {/* Navbar End */}
@@ -189,7 +186,10 @@ export default function Navbar() {
               className="flex items-center gap-2 cursor-pointer"
             >
               <img
-                src={user.photoURL || '/default-avatar.png'}
+                src={
+                  user.photoURL ||
+                  'https://img.daisyui.com/images/profile/demo/gordon@192.webp'
+                }
                 alt={user.displayName || 'User'}
                 className="w-10 h-10 rounded-full object-cover"
               />
@@ -201,6 +201,7 @@ export default function Navbar() {
               <li className="px-2 py-1 font-semibold text-gray-700">
                 {user.displayName || 'User'}
               </li>
+              <li>{user && userLinks}</li>
               <li>
                 <button
                   onClick={handleLogout}
