@@ -4,83 +4,106 @@ import { FaClock } from 'react-icons/fa';
 import { IoIosAirplane } from 'react-icons/io';
 
 export default function DestinationCard({ destination }) {
-  console.log(destination);
   return (
-    <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow cursor-pointer">
-      <figure className="relative h-64 overflow-hidden">
+    <div className="flex flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden h-full">
+      {/* Image Section */}
+      <div className="relative h-64 w-full overflow-hidden">
         <img
           src={destination.image}
           alt={destination.name}
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
-        {/* top left side one tag show  */}
-        <div className="absolute top-2 left-2 bg-emerald-300 text-white text-xs px-2 py-1 rounded-md shadow-lg">
-          {destination.tags[0].toUpperCase()}
-        </div>
+        {/* Top-left Tag */}
+        {destination.tags?.[0] && (
+          <div className="absolute top-3 left-3 bg-emerald-500 text-white text-xs px-3 py-1 rounded-md shadow-md uppercase font-semibold">
+            {destination.tags[0]}
+          </div>
+        )}
+        {/* Bottom Gradient Overlay */}
         <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-4">
-          <h2 className="text-white text-lg font-semibold">
-            <FaLocationDot className="inline-block mr-2 text-emerald-600" />
+          <h2 className="text-white text-lg font-bold flex items-center">
+            <FaLocationDot className="mr-2 text-emerald-400" />
             {destination.name}
           </h2>
         </div>
-      </figure>
-      <div className="card-body">
-        {/* <h2 className="card-title">
-            <FaLocationDot className="text-emerald-600 mr-2" />
-            {destination.name}
-          </h2> */}
-        <p className="text-gray-500 text-sm mb-2">
-          {destination.division} Division
-        </p>
-        <p className="text-gray-600 text-sm mb-2">{destination.description}</p>
-        <div className="mb-4">
-          <span className="block text-sm text-gray-500 mb-2">
-            Top Attractions:
-          </span>
-          <div className="flex flex-wrap gap-2">
-            {destination.attractions?.map((attr, idx) => (
-              <div key={idx} className="badge badge-outline text-xs">
-                {attr}
+      </div>
+
+      {/* Card Body */}
+      <div className="flex-1 flex flex-col justify-between p-5 bg-gray-50">
+        <div>
+          <p className="text-emerald-600 font-semibold text-sm mb-1">
+            {destination.division} Division
+          </p>
+          <p className="text-gray-700 text-sm mb-3 line-clamp-3">
+            {destination.description}
+          </p>
+
+          {/* Top Attractions */}
+          {destination.attractions?.length > 0 && (
+            <div className="mb-3">
+              <span className="block text-gray-500 text-xs font-medium mb-1">
+                Top Attractions:
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {destination.attractions.map((attr, idx) => (
+                  <span
+                    key={idx}
+                    className="badge badge-outline badge-sm text-xs bg-white border-gray-200 text-gray-600"
+                  >
+                    {attr}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-        <div className="mb-4">
-          <span className="block text-sm text-gray-500 mb-2">Tags:</span>
-          <div className="flex flex-wrap gap-2">
-            {destination.tags?.map((tag, idx) => (
-              <div key={idx} className="badge badge-outline text-xs">
-                {tag}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="flex flex-col md:flex-row gap-4 mt-2 text-sm text-gray-500">
-          {destination.bestTime && (
-            <div className="flex items-center gap-1">
-              <FaClock className="h-4 w-4" />
-              <span>Best Time: {destination.bestTime}</span>
             </div>
           )}
-        </div>
-        <div className="flex flex-col md:flex-row gap-4 mt-2 text-sm text-gray-500">
-          {destination.howToReach && (
-            <div className="flex items-center gap-1">
-              <IoIosAirplane className="h-4 w-4" />
-              <span>How to Reach: {destination.howToReach}</span>
+
+          {/* Tags */}
+          {destination.tags?.length > 0 && (
+            <div className="mb-3">
+              <span className="block text-gray-500 text-xs font-medium mb-1">
+                Tags:
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {destination.tags.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="badge badge-outline badge-sm text-xs bg-white border-gray-200 text-gray-600"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
+
+          {/* Info */}
+          <div className="flex flex-col md:flex-row gap-4 mt-2 text-gray-600 text-sm">
+            {destination.bestTime && (
+              <div className="flex items-center gap-1">
+                <FaClock className="h-4 w-4 text-emerald-500" />
+                <span>Best Time: {destination.bestTime}</span>
+              </div>
+            )}
+            {destination.howToReach && (
+              <div className="flex items-center gap-1">
+                <IoIosAirplane className="h-4 w-4 text-emerald-500" />
+                <span>How to Reach: {destination.howToReach}</span>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="divider "></div>
-
-        <div className="flex justify-between items-center">
-          <span className="text-gray-500 text-sm">
-            {destination.packages} packages
+        {/* Footer */}
+        <div className="mt-5 pt-3 border-t border-gray-200 flex justify-between items-center">
+          <span className="text-gray-500 text-sm font-medium">
+            {destination.packages || 0} Packages
           </span>
-          <span className="text-emerald-600 font-semibold">
-            <Link to={`/destinations/${destination.name}`}>View Details</Link>
-          </span>
+          <Link
+            to={`/packages/destination/${destination._id}`}
+            className="text-emerald-600 font-semibold text-sm hover:text-emerald-700 hover:underline"
+          >
+            View Packages
+          </Link>
         </div>
       </div>
     </div>

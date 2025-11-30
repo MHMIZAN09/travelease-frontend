@@ -3,17 +3,22 @@ import axios from 'axios';
 import PackageCard from '../components/PackageCard';
 import { toast } from 'react-toastify';
 import { SectionTitle } from '../components/SectionTitle';
-
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 export default function Packages() {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
-
+  useEffect(() => {
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+  }, []);
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await axios.get('/packages.json');
+        const response = await axios.get(
+          'http://localhost:3000/api/v1/packages/with-destinations/all'
+        );
         setPackages(response.data || []);
       } catch (error) {
         toast.error('Failed to fetch packages. Please try again later.');
@@ -25,20 +30,18 @@ export default function Packages() {
     fetchPackages();
   }, []);
 
-  // unique categories
+  // Unique categories for filter
   const categories = [...new Set(packages.map((pkg) => pkg.category))];
 
-  //  search results
+  // Search & filter logic
   const searchResults = packages.filter((pkg) =>
     pkg.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // filter results
   const filterResults = filterCategory
     ? packages.filter((pkg) => pkg.category === filterCategory)
     : packages;
 
-  // either search, or filter, or both applied
   let displayedPackages = packages;
   if (searchTerm && !filterCategory) displayedPackages = searchResults;
   else if (!searchTerm && filterCategory) displayedPackages = filterResults;
@@ -83,15 +86,15 @@ export default function Packages() {
       />
 
       {/* Search & Filter */}
-      <div className="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4  lg:justify-center lg:gap-8">
+      <div className="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 lg:justify-center lg:gap-8">
         <input
           type="text"
           placeholder="Search packages..."
           className="input input-bordered w-full md:w-1/3"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          data-aos="fade-up"
         />
-
         <select
           className="select select-bordered w-full md:w-1/4"
           value={filterCategory}
@@ -115,7 +118,7 @@ export default function Packages() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedPackages.length ? (
           displayedPackages.map((pkg) => (
-            <PackageCard key={pkg.id || pkg._id} pkg={pkg} />
+            <PackageCard key={pkg._id} pkg={pkg} />
           ))
         ) : (
           <div className="col-span-full flex flex-col justify-center items-center text-center p-8 bg-white rounded-lg shadow">

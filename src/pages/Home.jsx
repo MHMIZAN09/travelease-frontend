@@ -1,8 +1,7 @@
+import AboutSection from '../components/AboutSection';
 import { Hero } from '../components/Hero';
 import { SectionTitle } from '../components/SectionTitle';
-import Contact from './Contact';
 import { Newsletter } from './Newsletter';
-import PopularDestinations from './PopularDestinations';
 
 export default function Home() {
   return (
@@ -13,7 +12,7 @@ export default function Home() {
         title="Explore Bangladesh"
         description="Discover the most breathtaking destinations across Bangladesh from beaches to hills"
       />
-      <PopularDestinations />
+      <AboutSection title="About Us" />
       <Newsletter />
     </div>
   );

@@ -6,7 +6,7 @@ export function SectionTitle({ badgeText, title, description }) {
           {badgeText}
         </span>
       )}
-      <h2 className="text-3xl md:text-4xl font-extrabold mb-4 bg-clip-text text-transparent bg-linear-to-r from-emerald-600 to-teal-500">
+      <h2 className="text-3xl md:text-4xl font-extrabold mb-4 bg-clip-text text-transparent bg-linear-to-r from-emerald-600 to-teal-500 ">
         {title}
       </h2>
       {description && (

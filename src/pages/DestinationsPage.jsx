@@ -3,6 +3,8 @@ import axios from 'axios';
 import DestinationCard from '../components/DestinationCard';
 import { toast } from 'react-toastify';
 import { SectionTitle } from '../components/SectionTitle';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 export default function Destinations() {
   const [destinations, setDestinations] = useState([]);
@@ -11,13 +13,20 @@ export default function Destinations() {
   const [filterDivision, setFilterDivision] = useState('');
 
   useEffect(() => {
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+  }, []);
+
+  useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        const response = await axios.get('../../public/destinations.json');
+        const response = await axios.get(
+          'http://localhost:3000/api/v1/destinations'
+        );
         const data = Array.isArray(response.data)
           ? response.data
           : response.data.destinations;
         setDestinations(data || []);
+        console.log('Fetched destinations:', data);
       } catch (error) {
         toast.error('Failed to fetch destinations. Please try again later.');
         console.error(error);
@@ -28,10 +37,8 @@ export default function Destinations() {
     fetchDestinations();
   }, []);
 
-  // Extract unique divisions dynamically
   const divisions = [...new Set(destinations.map((dest) => dest.division))];
 
-  // Filtered & searched destinations
   const filteredDestinations = destinations.filter((dest) => {
     const matchesSearch = dest.name
       .toLowerCase()
@@ -52,16 +59,16 @@ export default function Destinations() {
 
   if (!destinations.length) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-screen text-center">
+      <div className="flex flex-col justify-center items-center min-h-screen text-center p-6">
         <img
           src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
           alt="No destinations"
-          className="w-40 h-40 mb-4 opacity-60"
+          className="w-40 h-40 mb-4 opacity-60 animate-pulse"
         />
-        <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+        <h2 className="text-3xl font-bold text-gray-700 mb-2">
           No Destinations Found
         </h2>
-        <p className="text-gray-500 max-w-sm">
+        <p className="text-gray-500 max-w-md">
           We couldn't find any destinations at the moment. Please check back
           later or try refreshing the page.
         </p>
@@ -70,7 +77,7 @@ export default function Destinations() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen  p-6">
       <SectionTitle
         badgeText="Explore Bangladesh"
         title="Our Destinations"
@@ -78,18 +85,20 @@ export default function Destinations() {
       />
 
       {/* Search & Filter Section */}
-      <div className="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 lg:justify-center lg:gap-8">
+      <div className="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4 lg:justify-center lg:gap-8">
         <input
           type="text"
           placeholder="Search destinations..."
-          className="input input-bordered w-full md:w-1/3"
+          className="input input-bordered w-full md:w-1/3 border-emerald-400 focus:border-emerald-500 focus:ring-emerald-200 shadow-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          data-aos="fade-right"
         />
         <select
-          className="select select-bordered w-full md:w-1/4"
+          className="select select-bordered w-full md:w-1/4 border-emerald-400 focus:border-emerald-500 focus:ring-emerald-200 shadow-sm"
           value={filterDivision}
           onChange={(e) => setFilterDivision(e.target.value)}
+          data-aos="fade-left"
         >
           <option value="">Filter by Division</option>
           {divisions.map((division) => (
@@ -100,20 +109,27 @@ export default function Destinations() {
         </select>
       </div>
 
-      <div className="mb-8">
-        <p className="text-gray-600">
-          Showing {filteredDestinations.length} of {destinations.length}{' '}
-          destinations
-        </p>
+      <div className="mb-6 text-gray-600 text-sm">
+        Showing {filteredDestinations.length} of {destinations.length}{' '}
+        destinations
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredDestinations.length ? (
-          filteredDestinations.map((dest) => (
-            <DestinationCard key={dest.id || dest._id} destination={dest} />
+          filteredDestinations.map((dest, index) => (
+            <div
+              key={dest.id || dest._id}
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
+            >
+              <DestinationCard destination={dest} />
+            </div>
           ))
         ) : (
-          <div className="col-span-full flex flex-col justify-center items-center text-center p-8 bg-white rounded-lg shadow">
+          <div
+            className="col-span-full flex flex-col justify-center items-center text-center p-8 bg-white rounded-lg shadow-lg"
+            data-aos="zoom-in"
+          >
             <img
               src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
               alt="No results"
