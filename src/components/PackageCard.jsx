@@ -10,38 +10,58 @@ export default function PackageCard({ pkg }) {
       : pkg.destination || 'Unknown';
 
   return (
-    <div className="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
-      <div className="relative h-48 overflow-hidden">
+    <div className="flex flex-col bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 h-full">
+      {/* Image Section */}
+      <div className="relative h-52 w-full overflow-hidden">
         <img
-          src={pkg.images?.[0] || ''}
+          src={pkg.images?.[0] || 'https://via.placeholder.com/400x300'}
           alt={pkg.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        {/* Rating Badge */}
+        <div className="absolute top-3 right-3 bg-yellow-400 text-white px-2 py-1 rounded-md flex items-center gap-1 text-xs font-semibold shadow-md">
+          <Star className="h-3 w-3" /> {pkg.rating ?? 0}
+        </div>
       </div>
 
-      <div className="p-4 space-y-2">
-        <h3 className="text-base font-semibold">{pkg.title}</h3>
-        <p className="text-gray-600 text-xs flex items-center gap-1">
-          <MapPin className="h-3 w-3" /> {destinationName}
-        </p>
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <div className="flex items-center gap-1 text-yellow-500">
-            <Star className="h-3 w-3" /> {pkg.rating ?? 0}
+      {/* Card Body */}
+      <div className="flex-1 p-4 flex flex-col justify-between">
+        <div className="space-y-2">
+          <h3 className="text-lg font-semibold text-gray-800">{pkg.title}</h3>
+          <p className="text-gray-500 text-xs flex items-center gap-1">
+            <MapPin className="h-3 w-3 text-emerald-500" /> {destinationName}
+          </p>
+          <p className="text-gray-400 text-xs">
+            {pkg.totalReviews ?? 0} reviews
+          </p>
+
+          <div className="flex items-center gap-3 mt-2">
+            {pkg.duration && (
+              <div className="flex items-center gap-1 text-gray-500 text-xs">
+                <Clock className="h-3 w-3 text-emerald-500" /> {pkg.duration}
+              </div>
+            )}
+            {pkg.maxPeople && (
+              <div className="flex items-center gap-1 text-gray-500 text-xs">
+                <Users className="h-3 w-3 text-emerald-500" /> {pkg.maxPeople}{' '}
+                pax
+              </div>
+            )}
           </div>
-          <span>({pkg.totalReviews ?? 0} reviews)</span>
         </div>
-      </div>
 
-      <div className="p-4 pt-0 flex items-center justify-between">
-        <div className="text-emerald-600 font-semibold">
-          ৳{pkg.discountedPrice ?? pkg.price}
+        {/* Footer */}
+        <div className="mt-4 pt-3 border-t border-gray-200 flex items-center justify-between">
+          <div className="text-emerald-600 font-bold text-lg">
+            ৳{pkg.discountedPrice ?? pkg.price}
+          </div>
+          <button
+            onClick={() => navigate(`/packages/${pkg._id}`)}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+          >
+            Details
+          </button>
         </div>
-        <button
-          className="btn btn-success text-white"
-          onClick={() => navigate(`/packages/${pkg._id}`)}
-        >
-          Details
-        </button>
       </div>
     </div>
   );

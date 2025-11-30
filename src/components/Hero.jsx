@@ -2,7 +2,10 @@ import { Search, Calendar, MapPin, Users } from 'lucide-react';
 
 export function Hero() {
   return (
-    <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
+    <section
+      className="relative min-h-[600px] flex items-center justify-center overflow-hidden bg-linear-to-br from-emerald-500 to-teal-600
+"
+    >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
@@ -16,10 +19,10 @@ export function Hero() {
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h1 className="text-white text-5xl md:text-6xl lg:text-7xl font-bold">
+          <h1 className="text-[#FFFFFF] text-5xl md:text-6xl lg:text-7xl font-bold">
             Explore Beautiful Bangladesh
           </h1>
-          <p className="text-white/90 text-xl md:text-2xl max-w-2xl mx-auto">
+          <p className=" text-xl text-[#F1F1F1] md:text-2xl max-w-2xl mx-auto">
             From the world's longest sea beach to the Sundarbans - Discover the
             natural wonders of Bangladesh
           </p>

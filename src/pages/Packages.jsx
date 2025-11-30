@@ -3,13 +3,16 @@ import axios from 'axios';
 import PackageCard from '../components/PackageCard';
 import { toast } from 'react-toastify';
 import { SectionTitle } from '../components/SectionTitle';
-
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 export default function Packages() {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
-
+  useEffect(() => {
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+  }, []);
   useEffect(() => {
     const fetchPackages = async () => {
       try {
@@ -90,6 +93,7 @@ export default function Packages() {
           className="input input-bordered w-full md:w-1/3"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          data-aos="fade-up"
         />
         <select
           className="select select-bordered w-full md:w-1/4"

@@ -1,8 +1,18 @@
+import { useEffect } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, MessageCircle } from 'lucide-react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import ContactMap from './ContactMap';
-import { SectionTitle } from '../components/SectionTitle';
 
 export default function Contact() {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      easing: 'ease-in-out',
+      once: true,
+    });
+  }, []);
+
   const ContactList = [
     {
       icon: <Phone className="h-6 w-6 text-emerald-600" />,
@@ -34,7 +44,7 @@ export default function Contact() {
     {
       icon: <Clock className="h-6 w-6 text-orange-600" />,
       title: 'Office Hours',
-      info: ['Saturday - Thursday: 9:00 AM - 6:00 PM', 'Friday: Closed'],
+      info: ['Saturday–Thursday: 9:00 AM – 6:00 PM', 'Friday: Closed'],
       bg: 'bg-orange-100',
     },
   ];
@@ -58,202 +68,165 @@ export default function Contact() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-linear-to-b from-emerald-50 to-white">
       {/* Hero Section */}
-      {/* <section className="bg-linear-to-r from-emerald-600 to-teal-600 text-white py-20 shadow-inner rounded-lg">
+      <div
+        className="bg-linear-to-r from-emerald-600 to-teal-600 py-20 text-white mb-10 rounded-b-3xl shadow-lg"
+        data-aos="fade-down"
+      >
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">Get in Touch</h1>
-          <p className="text-lg max-w-2xl mx-auto text-emerald-100">
-            Planning your dream trip across Bangladesh? Our team is here to help
-            you every step of the way.
+          <h1 className="text-4xl font-bold mb-3">Get in Touch</h1>
+          <p className="text-emerald-100 max-w-2xl mx-auto">
+            We’re always ready to help you plan your perfect trip across
+            Bangladesh.
           </p>
         </div>
-      </section> */}
-      <SectionTitle
-        title="Contact Us"
-        description="We're here to help. Reach out to us through any of the following ways."
-      />
+      </div>
 
-      {/* Contact Form & Info */}
+      {/* Contact Info + Form */}
       <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Left Side – Contact Information */}
-            <div className="space-y-6">
-              {ContactList.map((item, i) => (
-                <div
-                  key={i}
-                  className="card bg-white shadow hover:shadow-lg transition p-6"
-                >
-                  <div className="flex items-start gap-4">
-                    <div
-                      className={`w-12 h-12 ${item.bg} rounded-full flex items-center justify-center shrink-0`}
-                    >
-                      {item.icon}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-800 mb-2">
-                        {item.title}
-                      </h3>
-                      {item.info.map((line, idx) => (
-                        <p key={idx} className="text-gray-600">
-                          {line}
-                        </p>
-                      ))}
-                      {item.note && (
-                        <p className="text-sm text-gray-500 mt-2">
-                          {item.note}
-                        </p>
-                      )}
-                    </div>
+        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* Left - Contact Cards */}
+          <div className="space-y-6">
+            {ContactList.map((item, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 border border-gray-100"
+                data-aos="fade-up"
+                data-aos-delay={i * 100}
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className={`w-12 h-12 ${item.bg} rounded-xl flex items-center justify-center`}
+                  >
+                    {item.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                      {item.title}
+                    </h3>
+                    {item.info.map((line, idx) => (
+                      <p key={idx} className="text-gray-600">
+                        {line}
+                      </p>
+                    ))}
+                    {item.note && (
+                      <p className="text-sm text-gray-500 mt-1">{item.note}</p>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Right Side – Contact Form */}
-            <div className="lg:col-span-2">
-              <div className="card shadow-lg p-8">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-                  Send Us a Message
-                </h2>
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">First Name *</span>
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Your first name"
-                        className="input input-bordered w-full"
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Last Name *</span>
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Your last name"
-                        className="input input-bordered w-full"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Email *</span>
-                      </label>
-                      <input
-                        type="email"
-                        placeholder="you@example.com"
-                        className="input input-bordered w-full"
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Phone *</span>
-                      </label>
-                      <input
-                        type="tel"
-                        placeholder="+880 1711-123456"
-                        className="input input-bordered w-full"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text">Interested Destination</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Cox's Bazar, Sundarbans, Sylhet..."
-                      className="input input-bordered w-full"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">
-                          Preferred Travel Date
-                        </span>
-                      </label>
-                      <input
-                        type="date"
-                        className="input input-bordered w-full"
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Number of Travelers</span>
-                      </label>
-                      <input
-                        type="number"
-                        min="1"
-                        placeholder="2"
-                        className="input input-bordered w-full"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text">
-                        Message / Special Requirements *
-                      </span>
-                    </label>
-                    <textarea
-                      rows={5}
-                      placeholder="Describe your trip plans, preferences, or special needs..."
-                      className="textarea textarea-bordered w-full"
-                    />
-                  </div>
-
-                  <button className="btn w-full bg-linear-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white">
-                    <Send className="mr-2 h-4 w-4 inline text-white" /> Send
-                    Inquiry
-                  </button>
-
-                  <p className="text-sm text-gray-500 text-center mt-2">
-                    We’ll get back to you within 24 hours (usually faster!)
-                  </p>
-                </form>
               </div>
+            ))}
+          </div>
+
+          {/* Right - Contact Form */}
+          <div className="lg:col-span-2" data-aos="fade-left">
+            <div className="bg-white rounded-2xl shadow-xl p-10 border border-gray-100">
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+                Send Us a Message
+              </h2>
+
+              <form className="space-y-6">
+                {/* Name Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <input
+                    type="text"
+                    placeholder="First Name *"
+                    className="input input-bordered w-full rounded-xl"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Last Name *"
+                    className="input input-bordered w-full rounded-xl"
+                  />
+                </div>
+
+                {/* Email + Phone */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <input
+                    type="email"
+                    placeholder="Email Address *"
+                    className="input input-bordered w-full rounded-xl"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Phone Number *"
+                    className="input input-bordered w-full rounded-xl"
+                  />
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="Interested Destination (Optional)"
+                  className="input input-bordered w-full rounded-xl"
+                />
+
+                {/* Date + Travelers */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <input
+                    type="date"
+                    className="input input-bordered w-full rounded-xl"
+                  />
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Number of Travelers"
+                    className="input input-bordered w-full rounded-xl"
+                  />
+                </div>
+
+                <textarea
+                  rows={5}
+                  placeholder="Tell us about your trip or special requirements..."
+                  className="textarea textarea-bordered w-full rounded-xl"
+                />
+
+                <button className="w-full py-3 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 text-white font-semibold hover:opacity-90 transition flex items-center justify-center gap-2">
+                  <Send className="h-5 w-5" /> Send Inquiry
+                </button>
+
+                <p className="text-sm text-gray-500 text-center">
+                  We respond within 24 hours (usually faster!)
+                </p>
+              </form>
             </div>
           </div>
         </div>
       </section>
 
       {/* Branch Offices */}
-      <section className="py-16 bg-white rounded-lg">
+      <section className="py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-3 text-gray-800">
+          <h2
+            className="text-3xl font-bold mb-2 text-gray-800"
+            data-aos="fade-up"
+          >
             Our Branch Offices
           </h2>
-          <p className="text-gray-600 mb-12">
-            Visit us at one of our offices across Bangladesh
+          <p
+            className="text-gray-600 mb-10"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            Visit any of our regional offices across Bangladesh
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {BranchOffices.map((b, i) => (
               <div
                 key={i}
-                className="card shadow hover:shadow-md transition p-6"
+                className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 border border-gray-100"
+                data-aos="zoom-in"
+                data-aos-delay={i * 100}
               >
-                <h3 className="text-lg font-semibold mb-3 text-emerald-700">
+                <h3 className="text-xl font-semibold text-emerald-700 mb-2">
                   {b.city}
                 </h3>
-                <p className="flex items-start justify-center gap-2 text-sm text-gray-600 mb-1">
-                  <MapPin className="h-4 w-4 text-emerald-600 shrink-0 mt-1" />
-                  {b.address}
+                <p className="text-gray-600 flex items-center justify-center gap-2 mb-2">
+                  <MapPin className="h-5 w-5 text-emerald-600" /> {b.address}
                 </p>
-                <p className="flex items-center justify-center gap-2 text-sm text-gray-600">
-                  <Phone className="h-4 w-4 text-emerald-600" />
-                  {b.phone}
+                <p className="text-gray-600 flex items-center justify-center gap-2">
+                  <Phone className="h-5 w-5 text-emerald-600" /> {b.phone}
                 </p>
               </div>
             ))}
@@ -262,21 +235,20 @@ export default function Contact() {
       </section>
 
       {/* Map Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-emerald-50" data-aos="fade-up">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-            Our Locations
+          <h2 className="text-3xl font-bold text-center mb-3">
+            Our Locations on Map
           </h2>
-          <p className="text-gray-600 mb-8 text-center">
-            Explore our head office and branch locations across Bangladesh
+          <p className="text-gray-600 text-center mb-8">
+            Find our head and branch offices easily
           </p>
 
-          <div className="relative rounded-xl shadow-lg overflow-hidden h-96">
-            {/* Map Component */}
+          <div className="rounded-2xl overflow-hidden shadow-xl border border-gray-200 h-96 relative">
             <ContactMap />
-            <div className="absolute top-4 left-4 bg-white bg-opacity-80 px-4 py-2 rounded-md shadow-md">
-              <MapPin className="inline h-5 w-5 text-emerald-600 mr-2" />
-              Dhaka Head Office
+            <div className="absolute top-4 left-4 bg-white bg-opacity-90 px-4 py-2 rounded-lg shadow-md backdrop-blur-sm">
+              <MapPin className="inline h-5 w-5 text-emerald-600 mr-2" /> Dhaka
+              Head Office
             </div>
           </div>
         </div>

@@ -23,7 +23,9 @@ export default function Login() {
     signInUser(email, password)
       .then((result) => {
         const loggedUser = result.user;
+
         toast.success(`Welcome back ${loggedUser.displayName || 'User'}!`);
+
         navigate('/');
       })
       .catch((error) => {
@@ -35,8 +37,10 @@ export default function Login() {
   const handleGoogleSignIn = async () => {
     try {
       const user = await signInWithGoogle();
+
       toast.success(`Welcome ${user.displayName || 'User'}!`);
       navigate('/');
+      console.log(user.displayName);
     } catch (error) {
       toast.error(`Google Login Error: ${error.message}`);
     }

@@ -1,96 +1,109 @@
 import AboutSection from '../components/AboutSection';
-import { SectionTitle } from './../components/SectionTitle';
+import { SectionTitle } from '../components/SectionTitle';
 import FQA from '../../public/FQA.png';
+import 'aos/dist/aos.css';
+import AOS from 'aos';
+import { useEffect } from 'react';
+
 export default function About() {
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-linear-to-b from-emerald-50 to-white">
       {/* HERO SECTION */}
-      <SectionTitle
-        title="About Us"
-        description="Discover TraveLease: Your Gateway to Unforgettable Journeys Across Bangladesh"
-      />
+      <div data-aos="fade-up">
+        <SectionTitle
+          title="About Us"
+          description="Discover TraveLease: Your Gateway to Unforgettable Journeys"
+        />
+      </div>
 
-      <AboutSection />
+      {/* ABOUT SECTION */}
+      <div data-aos="fade-up">
+        <AboutSection />
+      </div>
 
-      {/* TESTIMONIAL SECTION */}
-      <section className="py-24 bg-linear-to-r from-emerald-500 to-emerald-700 text-white text-center px-6 my-12 rounded-2xl ">
-        <h2 className="text-3xl font-bold mb-6">What customers say</h2>
+      {/* TESTIMONIAL */}
+      <section
+        data-aos="zoom-in"
+        className="py-24 px-6 my-16 rounded-3xl bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-xl"
+      >
+        <h2 className="text-4xl font-bold mb-6">What Our Travelers Say</h2>
 
-        <p className="max-w-2xl mx-auto text-lg mb-10">
-          “Travelling with TraveLease was the best experience of my life. Safe,
-          comfortable, and truly memorable.”
+        <p className="max-w-2xl mx-auto text-lg mb-10 opacity-90">
+          “TraveLease made my whole trip smooth, safe and unforgettable. Their
+          planning, support and comfort level are top-notch!”
         </p>
 
         <div className="flex justify-center">
-          <div className="bg-white text-gray-700 px-6 py-4 rounded-full shadow-lg flex items-center gap-3">
+          <div className="bg-white text-gray-700 px-8 py-4 rounded-full shadow-xl flex items-center gap-4">
             <img
               src="https://i.pravatar.cc/80"
-              className="w-10 h-10 rounded-full"
+              className="w-12 h-12 rounded-full shadow"
               alt="Customer"
             />
             <div>
-              <h4 className="font-semibold"></h4>
-              <p className="text-sm text-gray-500"></p>
+              <h4 className="font-semibold">Ahsan Rahim</h4>
+              <p className="text-sm text-gray-500">Traveller</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ / SERVICE SECTION */}
-      <section className="py-20 bg-base-100 rounded-2xl my-12">
+      {/* FAQ SECTION */}
+      <section data-aos="fade-up" className="py-20">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl text-emerald-500 font-bold mb-10">
-            Full range of travel service
-            <span className="w-24 h-1 rounded-full bg-emerald-300 opacity-50"></span>
+          <h2 className="text-4xl font-bold text-emerald-600 mb-4">
+            Full Range of Travel Services
           </h2>
+          <p className="text-gray-600 max-w-xl mx-auto mb-12">
+            Get answers to the most common questions & explore how we make your
+            travel smooth and memorable.
+          </p>
 
-          <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-            {/* Left FAQ */}
-            <div className="space-y-6 text-left">
-              <div className="collapse collapse-plus bg-base-200">
-                <input type="radio" name="faq" />
-                <div className="collapse-title text-lg font-medium">
-                  Starts the automated process.
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            {/* LEFT FAQ */}
+            <div className="space-y-4">
+              {[
+                {
+                  q: 'Starts the automated process.',
+                  a: 'Everything begins as soon as your booking is confirmed.',
+                },
+                {
+                  q: 'The automated process starts.',
+                  a: 'Our expert team prepares your travel step by step.',
+                },
+                {
+                  q: 'Automated process starts.',
+                  a: 'We ensure safety, comfort, and hassle-free trips.',
+                },
+                {
+                  q: 'Process the automated magic.',
+                  a: 'Experience Bangladesh like never before.',
+                },
+              ].map((faq, index) => (
+                <div
+                  key={index}
+                  className="collapse collapse-plus bg-emerald-50 border border-emerald-100 rounded-xl shadow-sm"
+                >
+                  <input type="radio" name="faq" />
+                  <div className="collapse-title text-lg font-semibold text-emerald-700">
+                    {faq.q}
+                  </div>
+                  <div className="collapse-content text-gray-600">{faq.a}</div>
                 </div>
-                <div className="collapse-content text-gray-600">
-                  Everything begins as soon as your booking is confirmed.
-                </div>
-              </div>
-
-              <div className="collapse collapse-plus bg-base-200">
-                <input type="radio" name="faq" />
-                <div className="collapse-title text-lg font-medium">
-                  The automated process starts.
-                </div>
-                <div className="collapse-content text-gray-600">
-                  Our team prepares your travel experience step by step.
-                </div>
-              </div>
-
-              <div className="collapse collapse-plus bg-base-200">
-                <input type="radio" name="faq" />
-                <div className="collapse-title text-lg font-medium">
-                  Automated process starts.
-                </div>
-                <div className="collapse-content text-gray-600">
-                  We ensure safe and smooth trips for all travelers.
-                </div>
-              </div>
-
-              <div className="collapse collapse-plus bg-base-200">
-                <input type="radio" name="faq" />
-                <div className="collapse-title text-lg font-medium">
-                  Process the automated magic.
-                </div>
-                <div className="collapse-content text-gray-600">
-                  Experience Bangladesh like never before.
-                </div>
-              </div>
+              ))}
             </div>
 
-            {/* Right Illustration */}
-            <div className="flex justify-center">
-              <img src={FQA} alt="FAQ Illustration" />
+            {/* RIGHT IMAGE */}
+            <div className="flex justify-center items-center">
+              <img
+                src={FQA}
+                alt="FAQ Illustration"
+                className="w-80 md:w-full drop-shadow-xl"
+              />
             </div>
           </div>
         </div>

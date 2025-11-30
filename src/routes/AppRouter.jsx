@@ -13,6 +13,12 @@ import DestinationsPage from '../pages/DestinationsPage';
 import CreatePackageForm from '../pages/admin/CreatePackage';
 import PackagesByDestination from '../pages/PackagesByDestination';
 import PackageDetails from '../pages/PackageDetails';
+import UserBooking from '../pages/user/UserBooking';
+import UserDashboard from '../pages/user/UserDashboard';
+import UserProfile from '../pages/user/UserProfile';
+import PrivateRoute from './PrivateRoute';
+import AdminDashboard from './../pages/admin/AdminDashboard';
+import AllUsers from '../pages/admin/UsersTable';
 
 const route = createBrowserRouter([
   {
@@ -51,10 +57,7 @@ const route = createBrowserRouter([
         path: 'addDestination',
         element: <CreateDestination />,
       },
-      {
-        path: 'admin/createPackage',
-        element: <CreatePackageForm />,
-      },
+
       {
         path: 'packages/destination/:destinationId',
         element: <PackagesByDestination />,
@@ -62,6 +65,63 @@ const route = createBrowserRouter([
       {
         path: 'packages/:id',
         element: <PackageDetails />,
+      },
+      // private routes
+      {
+        path: 'dashboard',
+        element: (
+          <PrivateRoute>
+            <UserDashboard />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: 'bookings',
+        element: (
+          <PrivateRoute>
+            <UserBooking />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <PrivateRoute>
+            <UserProfile />
+          </PrivateRoute>
+        ),
+      },
+
+      // ADMIN
+
+      {
+        path: 'admin/dashboard',
+        element: <AdminDashboard />,
+      },
+      {
+        path: 'admin/users',
+        element: <div>manage users</div>,
+      },
+      {
+        path: 'admin/createPackage',
+        element: <CreateDestination />,
+      },
+
+      {
+        path: 'admin/managePackages',
+        element: <div>manage packages</div>,
+      },
+      {
+        path: 'admin/createDestinations',
+        element: <div>create destinations</div>,
+      },
+      {
+        path: 'admin/manageDestinations',
+        element: <div>manage destinations</div>,
+      },
+      {
+        path: 'admin/allUsers',
+        element: <AllUsers />,
       },
     ],
   },
