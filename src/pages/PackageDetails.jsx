@@ -1,29 +1,25 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Star, Users, MapPin, Clock } from 'lucide-react';
 import axios from 'axios';
-
-const formatDate = (date) => {
-  if (!date) return 'N/A';
-  const d = new Date(date);
-  return Number.isNaN(d.getTime()) ? 'Invalid Date' : d.toLocaleDateString();
-};
+import { Star, Users, Clock, MapPin } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function PackageDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [pkg, setPkg] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [mainImageIndex, setMainImageIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState('description');
 
   useEffect(() => {
     const fetchPackage = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3000/api/v1/packages/${id}`
-        );
-        console.log('Fetched package:', res.data);
-        setPkg(res.data);
+        const res = await axios.get(`http://localhost:5000/api/packages/${id}`);
+        setPkg(res.data.data);
       } catch (err) {
-        console.error('Error fetching package:', err);
+        toast.error('Failed to fetch package details');
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -31,112 +27,155 @@ export default function PackageDetails() {
     fetchPackage();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
-  if (!pkg) return <div>Package not found</div>;
+  // Auto-change main image every 4 seconds
+  useEffect(() => {
+    if (pkg?.images?.length > 1) {
+      const interval = setInterval(() => {
+        setMainImageIndex((prev) => (prev + 1) % pkg.images.length);
+      }, 4000);
+      return () => clearInterval(interval);
+    }
+  }, [pkg]);
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-gray-500">
+        Loading...
+      </div>
+    );
+
+  if (!pkg)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-gray-500">
+        Package not found.
+      </div>
+    );
+
+  const durationText =
+    pkg.duration?.days && pkg.duration?.nights
+      ? `${pkg.duration.days}D / ${pkg.duration.nights}N`
+      : 'N/A';
+
+  const handleBooking = () => {
+    navigate(`/booking/${pkg._id}`);
+  };
 
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left: Image */}
-        <div className="col-span-1">
-          <img
-            src={pkg.images?.[0] || ''}
-            alt={pkg.title}
-            className="w-full h-auto rounded-lg shadow-lg object-cover"
-          />
+    <div className="min-h-screen py-12 px-4 md:px-10 bg-gray-100">
+      <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
+        {/* Main Image Carousel */}
+        <div className="relative h-[500px] w-full">
+          {pkg.images?.[mainImageIndex] && (
+            <img
+              src={pkg.images[mainImageIndex]}
+              alt="Main"
+              className="w-full h-full object-cover rounded-b-xl transition-transform duration-700 ease-in-out"
+            />
+          )}
+          <div className="absolute bottom-6 left-6 bg-emerald-600 text-white px-4 py-2 rounded-xl font-semibold shadow-lg flex items-center gap-1">
+            <MapPin className="h-5 w-5" /> {pkg.destination?.name || 'Unknown'}
+          </div>
+
+          {/* Thumbnails */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3 overflow-x-auto">
+            {pkg.images.map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`Thumbnail ${idx}`}
+                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 transition-transform duration-300 hover:scale-110 ${
+                  idx === mainImageIndex
+                    ? 'border-emerald-600 shadow-lg'
+                    : 'border-gray-200'
+                }`}
+                onClick={() => setMainImageIndex(idx)}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Right: Details */}
-        <div className="col-span-2 space-y-4">
-          <h1 className="text-3xl font-bold">{pkg.title}</h1>
-          <p className="text-gray-600">{pkg.description}</p>
-
-          {/* Destination */}
-          <div className="flex flex-col gap-1">
-            <span className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              <strong>Destination:</strong> {pkg.destination?.name || 'N/A'}
-            </span>
-            <span>
-              <strong>Division:</strong> {pkg.destination?.division || 'N/A'}
-            </span>
-            <span>
-              <strong>Description:</strong>{' '}
-              {pkg.destination?.description || 'N/A'}
-            </span>
-            <span>
-              <strong>Tags:</strong>{' '}
-              {pkg.destination?.tags?.join(', ') || 'N/A'}
-            </span>
-          </div>
-
-          {/* Ratings & Availability */}
-          <div className="flex gap-6 text-gray-600">
-            <div className="flex items-center gap-1">
-              <Star className="text-yellow-500 h-4 w-4" />
-              {pkg.rating ?? 0} ({pkg.totalReviews ?? 0} reviews)
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              {formatDate(pkg.availability?.startDate)} -{' '}
-              {formatDate(pkg.availability?.endDate)}
-            </div>
-            <div className="flex items-center gap-1">
-              <Users className="h-4 w-4" /> Max{' '}
-              {pkg.availability?.slots ?? 'N/A'}
+        {/* Package Header */}
+        <div className="p-8 space-y-6">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <h1 className="text-4xl font-bold text-gray-800">{pkg.title}</h1>
+            <div className="flex flex-wrap items-center gap-5 mt-3 md:mt-0 text-gray-600">
+              <div className="flex items-center gap-1">
+                <Star className="h-5 w-5 text-yellow-400" /> {pkg.rating ?? 0}
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="h-5 w-5 text-emerald-500" /> {pkg.groupSize}{' '}
+                pax
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="h-5 w-5 text-emerald-500" /> {durationText}
+              </div>
             </div>
           </div>
 
-          {/* Overview */}
-          <div>
-            <h2 className="font-semibold text-lg">Overview</h2>
-            <p>{pkg.overview || 'N/A'}</p>
+          {/* Booking */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 p-6 bg-emerald-50 rounded-2xl shadow-inner">
+            <div className="text-4xl font-extrabold text-emerald-600">
+              ৳{pkg.price}
+            </div>
+            <button
+              onClick={handleBooking}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-semibold text-lg shadow-lg transition-transform duration-300 hover:scale-105"
+            >
+              Book Now
+            </button>
           </div>
 
-          {/* Itinerary */}
-          <div>
-            <h2 className="font-semibold text-lg">Itinerary</h2>
-            <ul className="list-disc list-inside">
-              {pkg.itinerary?.length > 0 ? (
-                pkg.itinerary.map((item) => (
-                  <li key={item._id}>
-                    <strong>Day {item.day}:</strong> {item.title} -{' '}
-                    {item.description}
-                  </li>
-                ))
-              ) : (
-                <li>N/A</li>
+          {/* Tabs for Description, Itinerary, Included, Excluded */}
+          <div className="mt-8">
+            <div className="flex border-b border-gray-200">
+              {['description', 'itinerary', 'included', 'excluded'].map(
+                (tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`py-3 px-6 font-semibold text-gray-700 transition-colors ${
+                      activeTab === tab
+                        ? 'border-b-4 border-emerald-600 text-emerald-600'
+                        : 'hover:text-emerald-600'
+                    }`}
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                )
               )}
-            </ul>
-          </div>
+            </div>
 
-          {/* Inclusions */}
-          <div>
-            <h2 className="font-semibold text-lg">Inclusions</h2>
-            <ul className="list-disc list-inside">
-              {pkg.inclusions?.length > 0 ? (
-                pkg.inclusions.map((item, idx) => <li key={idx}>{item}</li>)
-              ) : (
-                <li>N/A</li>
+            <div className="mt-6 text-gray-700 space-y-4">
+              {activeTab === 'description' && (
+                <p className="text-lg">{pkg.description}</p>
               )}
-            </ul>
-          </div>
-
-          {/* Exclusions */}
-          <div>
-            <h2 className="font-semibold text-lg">Exclusions</h2>
-            <ul className="list-disc list-inside">
-              {pkg.exclusions?.length > 0 ? (
-                pkg.exclusions.map((item, idx) => <li key={idx}>{item}</li>)
-              ) : (
-                <li>N/A</li>
+              {activeTab === 'itinerary' && (
+                <ul className="list-decimal list-inside space-y-1 text-gray-700">
+                  {pkg.itinerary?.map((item, idx) => (
+                    <li key={idx}>
+                      <span className="font-semibold text-gray-800">
+                        {item.title}:
+                      </span>{' '}
+                      {item.details}
+                    </li>
+                  ))}
+                </ul>
               )}
-            </ul>
-          </div>
-
-          {/* Price */}
-          <div className="text-2xl font-bold text-emerald-600 mt-4">
-            Price: ৳{pkg.discountedPrice ?? pkg.price}
+              {activeTab === 'included' && (
+                <ul className="list-disc list-inside text-gray-700">
+                  {pkg.included?.map((inc, idx) => (
+                    <li key={idx}>{inc}</li>
+                  ))}
+                </ul>
+              )}
+              {activeTab === 'excluded' && (
+                <ul className="list-disc list-inside text-gray-700">
+                  {pkg.excluded?.map((exc, idx) => (
+                    <li key={idx}>{exc}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -1,64 +1,93 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   createUserWithEmailAndPassword,
   GithubAuthProvider,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
 import auth from '../firebase/firebase.init';
+import axios from 'axios';
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Providers
   const googleProvider = new GoogleAuthProvider();
   const githubProvider = new GithubAuthProvider();
 
-  // Register user
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // Sign in user
   const signInUser = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // Google Login
   const signInWithGoogle = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
-  // GitHub Login
   const signInWithGithub = () => {
     setLoading(true);
     return signInWithPopup(auth, githubProvider);
   };
 
-  // Logout
   const logout = () => {
     setLoading(true);
     return signOut(auth);
   };
+  const resetPassword = (email) => {
+    setLoading(true);
+    return sendPasswordResetEmail(auth, email).finally(() => setLoading(false));
+  };
 
-  // Track user state
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          const token = await firebaseUser.getIdToken();
+
+          const res = await axios.get(
+            `http://localhost:5000/api/users/${firebaseUser.uid}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          // ❗ user is now SAFE for UI
+          setUser({
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            displayName: firebaseUser.displayName,
+            photoURL: firebaseUser.photoURL,
+            ...res.data.data,
+          });
+        } catch (err) {
+          console.error(err);
+          setUser({
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            displayName: firebaseUser.displayName,
+            photoURL: firebaseUser.photoURL,
+          });
+        }
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 
-    return () => unSubscribe();
+    return () => unsubscribe();
   }, []);
 
   const authInfo = {
@@ -69,6 +98,7 @@ function AuthProvider({ children }) {
     signInWithGoogle,
     signInWithGithub,
     logout,
+    resetPassword,
   };
 
   return (

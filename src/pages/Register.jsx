@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, User, Lock, Eye, EyeOff } from 'lucide-react';
@@ -6,93 +5,108 @@ import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { AuthContext } from '../components/provider/AuthProvider';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import { updateProfile } from 'firebase/auth';
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const { signInWithGoogle, createUser, signInWithGithub } =
     useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Handle Registration
-  const handleRegister = (e) => {
+  // Email & Password Registration
+  const handleRegister = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const name = form.name.value;
-    const email = form.email.value;
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
 
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
+    // Validation
+    if (password !== confirmPassword)
+      return toast.error('Passwords do not match');
+    if (password.length < 6)
+      return toast.error('Password must be at least 6 characters long');
+    if (!/[A-Z]/.test(password))
+      return toast.error('Password must contain at least one uppercase letter');
+    if (!/[0-9]/.test(password))
+      return toast.error('Password must contain at least one number');
+    if (!/[!@#$%^&*]/.test(password))
+      return toast.error(
+        'Password must contain at least one special character'
+      );
 
-    if (password.length < 6) {
-      toast.error('Password must be at least 6 characters long');
-      return;
-    }
-    if (!/[A-Z]/.test(password)) {
-      toast.error('Password must contain at least one uppercase letter');
-      return;
-    }
-    if (!/[0-9]/.test(password)) {
-      toast.error('Password must contain at least one number');
-      return;
-    }
-    if (!/[!@#$%^&*]/.test(password)) {
-      toast.error('Password must contain at least one special character');
-      return;
-    }
-    console.log(name, email, password);
+    try {
+      const result = await createUser(email, password);
+      const user = result.user;
 
-    createUser(email, password)
-      .then((result) => {
-        const createdUser = result.user;
-        console.log(createdUser);
-        toast.success('Registration successful!');
-        navigate('/');
-      })
-      .catch((error) => {
-        console.error('Registration Error:', error);
-        toast.error(`Registration Error: ${error.message}`);
+      // Update displayName for email/password users
+      await updateProfile(user, {
+        displayName: name,
+        photoURL: 'https://example.com/default-avatar.png',
       });
-  };
 
-  // Google Login
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await signInWithGoogle();
-      toast.success(`Welcome ${result.user.displayName || 'User'}!`);
+      // Save user to backend
+      await axios.post('http://localhost:5000/api/users', {
+        name: user.displayName,
+        email: user.email,
+        uid: user.uid,
+        photoURL: user.photoURL,
+        provider: 'password',
+        role: 'customer',
+      });
+
+      form.reset();
+      toast.success('Registration successful!');
       navigate('/');
     } catch (error) {
-      toast.error(`Google Login Error: ${error.message}`);
+      console.error(error);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
-  // GitHub Login
-  const handleGithubSignIn = async () => {
+  // Social login handler
+  const handleSocialLogin = async (provider) => {
     try {
-      const result = await signInWithGithub();
-      toast.success(`Welcome ${result.user.displayName || 'User'}!`);
+      let result;
+      if (provider === 'google') result = await signInWithGoogle();
+      if (provider === 'github') result = await signInWithGithub();
+
+      const user = result.user;
+
+      // Save user to backend (create if doesn't exist)
+      const res = await axios.post('http://localhost:5000/api/users', {
+        name: user.displayName || 'No Name',
+        email: user.email,
+        uid: user.uid,
+        photoURL: user.photoURL || 'https://example.com/default-avatar.png',
+        provider: provider,
+        role: 'customer',
+      });
+
+      toast.success(`Welcome ${res.data.data.name || 'User'}!`);
       navigate('/');
     } catch (error) {
-      toast.error(`GitHub Login Error: ${error.message}`);
+      console.error(error);
+      toast.error(
+        `Login Error: ${error.response?.data?.message || error.message}`
+      );
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-5xl bg-base-100 shadow-xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-        {/* LEFT SIDE LOTTIE */}
+        {/* Lottie animation */}
         <div className="hidden md:flex items-center justify-center bg-linear-to-br from-emerald-100 to-teal-100 p-6">
           <DotLottieReact src="/registration.json" loop autoplay />
         </div>
 
-        {/* RIGHT FORM */}
+        {/* Registration Form */}
         <form onSubmit={handleRegister} className="p-8 md:p-10 w-full">
           <h2 className="text-3xl font-bold text-center">Create Account</h2>
           <p className="text-center text-gray-500 mb-6">
@@ -173,10 +187,10 @@ export default function Register() {
             </div>
           </div>
 
-          {/* Register Btn */}
+          {/* Register Button */}
           <button
             type="submit"
-            className="btn w-full bg-linear-to-r from-emerald-600 to-teal-600 text-white"
+            className="btn w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
           >
             Create Account
           </button>
@@ -184,20 +198,19 @@ export default function Register() {
           {/* Divider */}
           <div className="divider my-6 text-sm">Or continue with</div>
 
-          {/* Social Login */}
+          {/* Social Logins */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <button
               type="button"
               className="btn btn-outline w-full flex items-center gap-2"
-              onClick={handleGoogleSignIn}
+              onClick={() => handleSocialLogin('google')}
             >
               <FcGoogle className="text-lg" /> Google
             </button>
-
             <button
               type="button"
               className="btn btn-outline w-full flex items-center gap-2"
-              onClick={handleGithubSignIn}
+              onClick={() => handleSocialLogin('github')}
             >
               <FaGithub className="text-lg text-blue-600" /> GitHub
             </button>

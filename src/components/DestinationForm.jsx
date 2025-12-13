@@ -1,30 +1,39 @@
-/* eslint-disable no-unused-vars */
+import React, { useContext } from 'react';
 import axios from 'axios';
-
 import { toast } from 'react-toastify';
-import createImage from '../../public/create.jpg';
+import { AuthContext } from './provider/AuthProvider';
+
 export default function DestinationForm() {
+  const { user } = useContext(AuthContext);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
 
     const newDestination = {
       name: form.name.value,
-      division: form.division.value,
-      image: form.image.value,
+      division: form.division.value || 'Not specified',
+      category: form.category.value || 'Nature',
+      images: form.images.value
+        ? form.images.value.split(',').map((url) => url.trim())
+        : [],
       description: form.description.value,
-      attractions: form.attractions.value.split(',').map((a) => a.trim()),
+      attractions: form.attractions.value
+        ? form.attractions.value.split(',').map((a) => a.trim())
+        : [],
       bestTime: form.bestTime.value,
       howToReach: form.howToReach.value,
-      tags: form.tags.value.split(',').map((t) => t.trim()),
+      tags: form.tags.value
+        ? form.tags.value.split(',').map((t) => t.trim())
+        : [],
+      createdBy: user?._id || null,
     };
 
     try {
-      const response = await axios.post(
-        'http://localhost:3000/api/v1/destinations',
+      await axios.post(
+        'http://localhost:5000/api/destinations',
         newDestination
       );
-
       toast.success('Destination created successfully!');
       form.reset();
     } catch (error) {
@@ -34,91 +43,92 @@ export default function DestinationForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center ">
-      <div className="bg-white shadow-xl rounded-xl overflow-hidden max-w-5xl w-full flex flex-col md:flex-row">
-        {/* LEFT SIDE IMAGE */}
-        <div className="md:w-1/2 w-full h-64 md:h-auto overflow-hidden">
-          <img
-            src={createImage}
-            alt="Destination"
-            className="hover:scale-110 transition duration-700 shrink-0 w-full h-full object-fill"
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-10">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Create New Destination
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            name="name"
+            type="text"
+            placeholder="Destination Name"
+            className="input input-bordered w-full"
+            required
           />
-        </div>
 
-        {/* RIGHT SIDE FORM */}
-        <div className="md:w-1/2 w-full p-8">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              name="name"
-              type="text"
-              defaultValue=""
-              placeholder="Destination Name"
-              className="input input-bordered w-full"
-              required
-            />
+          <input
+            name="division"
+            type="text"
+            placeholder="Division"
+            className="input input-bordered w-full"
+          />
 
-            <input
-              name="division"
-              type="text"
-              defaultValue=""
-              placeholder="Division"
-              className="input input-bordered w-full"
-              required
-            />
+          <select
+            name="category"
+            className="input input-bordered w-full"
+            defaultValue="Nature"
+          >
+            <option value="Beach">Beach</option>
+            <option value="Hill">Hill</option>
+            <option value="Historical">Historical</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Waterfall">Waterfall</option>
+            <option value="Urban">Urban</option>
+            <option value="Nature">Nature</option>
+          </select>
 
-            <input
-              name="image"
-              type="text"
-              defaultValue=""
-              placeholder="Image URL"
-              className="input input-bordered w-full"
-            />
+          <input
+            name="images"
+            type="text"
+            placeholder="Image URLs (comma separated)"
+            className="input input-bordered w-full"
+          />
 
-            <textarea
-              name="description"
-              defaultValue=""
-              placeholder="Description"
-              className="textarea textarea-bordered w-full"
-              rows="3"
-            />
+          <textarea
+            name="description"
+            placeholder="Description"
+            rows="3"
+            className="textarea textarea-bordered w-full"
+            required
+          />
 
-            <input
-              name="attractions"
-              type="text"
-              defaultValue=""
-              placeholder="Attractions (comma separated)"
-              className="input input-bordered w-full"
-            />
+          <input
+            name="attractions"
+            type="text"
+            placeholder="Attractions (comma separated)"
+            className="input input-bordered w-full"
+          />
 
-            <input
-              name="bestTime"
-              type="text"
-              defaultValue=""
-              placeholder="Best Time to Visit"
-              className="input input-bordered w-full"
-            />
+          <input
+            name="bestTime"
+            type="text"
+            placeholder="Best Time to Visit"
+            className="input input-bordered w-full"
+          />
 
-            <input
-              name="howToReach"
-              type="text"
-              defaultValue=""
-              placeholder="How to Reach"
-              className="input input-bordered w-full"
-            />
+          <input
+            name="howToReach"
+            type="text"
+            placeholder="How to Reach"
+            className="input input-bordered w-full"
+          />
 
-            <input
-              name="tags"
-              type="text"
-              defaultValue=""
-              placeholder="Tags (comma separated)"
-              className="input input-bordered w-full"
-            />
+          <input
+            name="tags"
+            type="text"
+            placeholder="Tags (comma separated)"
+            className="input input-bordered w-full"
+          />
 
-            <button className="btn btn-success text-white w-full" type="submit">
-              Create Destination
-            </button>
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="btn w-full bg-linear-to-r from-blue-600 to-teal-500 text-white hover:from-blue-700 hover:to-teal-600"
+          >
+            Create Destination
+          </button>
+        </form>
       </div>
     </div>
   );

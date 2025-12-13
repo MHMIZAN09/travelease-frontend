@@ -1,19 +1,19 @@
 import AboutSection from '../components/AboutSection';
 import { SectionTitle } from '../components/SectionTitle';
-import FQA from '../../public/FQA.png';
+import FQA from '../assets/FQA.png';
 import 'aos/dist/aos.css';
 import AOS from 'aos';
 import { useEffect } from 'react';
 
 export default function About() {
   useEffect(() => {
-    AOS.init({ duration: 1000 });
+    AOS.init({ duration: 1000, easing: 'ease-in-out', once: true });
   }, []);
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-emerald-50 to-white">
+    <div className="min-h-screen ">
       {/* HERO SECTION */}
-      <div data-aos="fade-up">
+      <div data-aos="fade-down">
         <SectionTitle
           title="About Us"
           description="Discover TraveLease: Your Gateway to Unforgettable Journeys"

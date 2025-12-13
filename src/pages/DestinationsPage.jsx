@@ -20,13 +20,10 @@ export default function Destinations() {
     const fetchDestinations = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:3000/api/v1/destinations'
+          'http://localhost:5000/api/destinations'
         );
-        const data = Array.isArray(response.data)
-          ? response.data
-          : response.data.destinations;
-        setDestinations(data || []);
-        console.log('Fetched destinations:', data);
+        console.log('Fetched destinations:', response.data.data);
+        setDestinations(response.data.data || []);
       } catch (error) {
         toast.error('Failed to fetch destinations. Please try again later.');
         console.error(error);

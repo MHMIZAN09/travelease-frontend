@@ -1,4 +1,4 @@
-import AboutUs from '../../public/about.png';
+import AboutUs from '../assets/about.png';
 
 const AboutSection = ({ title }) => {
   return (
