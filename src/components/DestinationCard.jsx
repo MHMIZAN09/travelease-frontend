@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { FaLocationDot } from 'react-icons/fa6';
 import { FaClock } from 'react-icons/fa';
 import { IoIosAirplane } from 'react-icons/io';
@@ -99,7 +99,7 @@ export default function DestinationCard({ destination }) {
             {destination.packages || 0} Packages
           </span>
           <Link
-            to={`/packages/destination/${destination._id}`}
+            to="/package"
             className="text-emerald-600 font-semibold text-sm hover:text-emerald-700 hover:underline"
           >
             View Packages

@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin, Clock, Send, MessageCircle } from 'lucide-react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ContactMap from './ContactMap';
+import { SectionTitle } from '../components/SectionTitle';
 
 export default function Contact() {
   useEffect(() => {
@@ -68,19 +69,13 @@ export default function Contact() {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-emerald-50 to-white">
+    <div className="min-h-screen ">
       {/* Hero Section */}
-      <div
-        className="bg-linear-to-r from-emerald-600 to-teal-600 py-20 text-white mb-10 rounded-b-3xl shadow-lg"
-        data-aos="fade-down"
-      >
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-3">Get in Touch</h1>
-          <p className="text-emerald-100 max-w-2xl mx-auto">
-            We’re always ready to help you plan your perfect trip across
-            Bangladesh.
-          </p>
-        </div>
+      <div data-aos="fade-down">
+        <SectionTitle
+          title="Contact Us"
+          description="We're Here to Help: Get in Touch with TraveLease"
+        />
       </div>
 
       {/* Contact Info + Form */}
@@ -235,7 +230,7 @@ export default function Contact() {
       </section>
 
       {/* Map Section */}
-      <section className="py-16 bg-emerald-50" data-aos="fade-up">
+      <section className="py-16 " data-aos="fade-up">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-3">
             Our Locations on Map

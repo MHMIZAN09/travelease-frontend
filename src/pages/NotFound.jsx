@@ -1,6 +1,6 @@
-
 import { useNavigate } from 'react-router-dom';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import Lottie from 'lottie-react';
+import errorAnimation from '../assets/Error_404.json'; // import the JSON
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ const NotFound = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       {/* Lottie Animation */}
       <div className="w-80 h-80">
-        <DotLottieReact src="../../public/Error 404.json" loop autoplay />
+        <Lottie animationData={errorAnimation} loop={true} autoplay={true} />
       </div>
 
       <button

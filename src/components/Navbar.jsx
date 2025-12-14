@@ -3,28 +3,29 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from './provider/AuthProvider';
 import { FiLogOut } from 'react-icons/fi';
 import { toast } from 'react-toastify';
-import logo from '../../public/logo.png';
+import logo from '../assets/logo.png';
+
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
+  console.log(user?.photoURL);
   const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
+  console.log(user);
+  const handleLogout = () => {
+    if (logout) {
+      logout();
       navigate('/login');
       toast.success('Logged out successfully!');
-    } catch (error) {
-      toast.error('Logout Failed. Please try again.');
-      console.error('Logout Error:', error);
+    } else {
+      toast.error('Logout function not available.');
     }
   };
 
   const getLinkClass = ({ isActive }) =>
     isActive
-      ? 'hover:text-[#0FA958] font-semibold underline underline-offset-4 transition-colors duration-200 text-[#0fa958]'
+      ? 'hover:text-[#0FA958] font-semibold underline underline-offset-4 transition-colors duration-200 text-[#0FA958]'
       : 'hover:text-[#0FA958] transition-colors duration-200';
 
-  // Public links
+  // Public Links
   const publicLinks = (
     <>
       <li>
@@ -55,7 +56,7 @@ export default function Navbar() {
     </>
   );
 
-  // User links
+  // User Links
   const userLinks = (
     <>
       <li>
@@ -64,7 +65,7 @@ export default function Navbar() {
         </NavLink>
       </li>
       <li>
-        <NavLink to="/bookings" className={getLinkClass}>
+        <NavLink to="/my-bookings" className={getLinkClass}>
           My Bookings
         </NavLink>
       </li>
@@ -76,7 +77,7 @@ export default function Navbar() {
     </>
   );
 
-  // Admin links
+  // Admin Links
   const adminLinks = (
     <>
       <li>
@@ -85,17 +86,17 @@ export default function Navbar() {
         </NavLink>
       </li>
       <li>
-        <NavLink to="/admin/users" className={getLinkClass}>
+        <NavLink to="/admin/manageUsers" className={getLinkClass}>
           Manage Users
         </NavLink>
       </li>
       <li>
-        <NavLink to="/admin/packages" className={getLinkClass}>
+        <NavLink to="/admin/managePackages" className={getLinkClass}>
           Manage Packages
         </NavLink>
       </li>
       <li>
-        <NavLink to="/admin/destinations" className={getLinkClass}>
+        <NavLink to="/admin/manageDestinations" className={getLinkClass}>
           Manage Destinations
         </NavLink>
       </li>
@@ -106,7 +107,7 @@ export default function Navbar() {
       </li>
       <li>
         <NavLink to="/admin/createDestinations" className={getLinkClass}>
-          Create Destinations
+          Create Destination
         </NavLink>
       </li>
     </>
@@ -117,6 +118,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto w-full px-4 flex items-center justify-between">
         {/* Navbar Start */}
         <div className="navbar-start flex items-center gap-2">
+          {/* Mobile Menu */}
           <div className="dropdown lg:hidden">
             <label tabIndex={0} className="btn btn-ghost">
               <svg
@@ -134,8 +136,6 @@ export default function Navbar() {
                 />
               </svg>
             </label>
-
-            {/* Mobile menu */}
             <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
               {publicLinks}
               {user && (user.role === 'admin' ? adminLinks : userLinks)}
@@ -155,12 +155,9 @@ export default function Navbar() {
           <img src={logo} alt="logo" className="w-14 h-14" />
         </div>
 
-        {/* Navbar center (Desktop) */}
+        {/* Navbar Center - Desktop */}
         <div className="hidden lg:flex navbar-center">
-          <ul className="menu menu-horizontal px-1 space-x-2">
-            {publicLinks}
-            {user && (user.role === 'admin' ? adminLinks : userLinks)}
-          </ul>
+          <ul className="menu menu-horizontal px-1 space-x-2">{publicLinks}</ul>
         </div>
 
         {/* Navbar End */}
@@ -171,21 +168,27 @@ export default function Navbar() {
                 tabIndex={0}
                 className="cursor-pointer flex items-center gap-2"
               >
-                <img
-                  src={
-                    user.photoURL ||
-                    'https://img.daisyui.com/images/profile/demo/gordon@192.webp'
-                  }
-                  alt={user.displayName || 'User'}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
+                {user?.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName || 'User'}
+                    className="w-10 h-10 rounded-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center">
+                    <span className="text-white font-bold">
+                      {user?.displayName?.[0] || 'U'}
+                    </span>
+                  </div>
+                )}
               </label>
 
               <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-44 mt-2">
                 <li className="px-2 py-1 font-semibold text-gray-700">
                   {user.displayName || 'User'}
                 </li>
-                {user.role === 'admin' ? adminLinks : userLinks}
+                {user?.role === 'admin' ? adminLinks : userLinks}
                 <li>
                   <button
                     onClick={handleLogout}

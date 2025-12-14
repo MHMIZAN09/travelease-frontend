@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
@@ -6,73 +7,96 @@ import { FcGoogle } from 'react-icons/fc';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../components/provider/AuthProvider';
+import axios from 'axios';
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const { signInWithGoogle, signInUser, signInWithGithub } =
-    useContext(AuthContext);
+  const {
+    signInUser,
+    signInWithGoogle,
+    signInWithGithub,
+    sendVerificationEmail,
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // handle login email and password
-  const handleLogin = (e) => {
+  // Handle Email/Password Login
+  const handleLogin = async (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
 
-    signInUser(email, password)
-      .then((result) => {
-        const loggedUser = result.user;
-
-        toast.success(`Welcome back ${loggedUser.displayName || 'User'}!`);
-
-        navigate('/');
-      })
-      .catch((error) => {
-        toast.error(`Login Error: ${error.message}`);
-      });
-  };
-
-  // Google Login
-  const handleGoogleSignIn = async () => {
     try {
-      const user = await signInWithGoogle();
+      const result = await signInUser(email, password);
+      const loggedUser = result.user;
 
-      toast.success(`Welcome ${user.displayName || 'User'}!`);
+      // Check if email is verified
+      if (!loggedUser.emailVerified) {
+        toast.warning('Please verify your email before logging in.');
+        await sendVerificationEmail(loggedUser);
+        return;
+      }
+
+      toast.success(`Welcome back ${loggedUser.displayName || 'User'}!`);
       navigate('/');
-      console.log(user.displayName);
     } catch (error) {
-      toast.error(`Google Login Error: ${error.message}`);
+      toast.error(`Login Error: ${error.message}`);
     }
   };
 
-  // GitHub Login
-  const handleGithubSignIn = async () => {
+  // Social Login helper
+  const handleSocialLogin = async (provider) => {
     try {
-      const user = await signInWithGithub();
-      toast.success(`Welcome ${user.displayName || 'User'}!`);
+      let result;
+
+      if (provider === 'google') {
+        result = await signInWithGoogle();
+      } else if (provider === 'github') {
+        result = await signInWithGithub();
+      }
+
+      const user = result.user;
+
+      // Send to backend: create if doesn't exist
+      const res = await axios.post(
+        'https://travelease-backend.vercel.app/api/users',
+        {
+          name: user.displayName || 'No Name',
+          email: user.email,
+          uid: user.uid,
+          photoURL: user.photoURL,
+          provider: provider,
+          role: 'customer',
+        }
+      );
+
+      const loggedUser = res.data.data;
+      toast.success(`Welcome ${loggedUser.name || 'User'}!`);
       navigate('/');
     } catch (error) {
-      toast.error(`GitHub Login Error: ${error.message}`);
+      console.error(error);
+      toast.error(
+        `Login Error: ${error.response?.data?.message || error.message}`
+      );
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-5xl bg-base-100 shadow-xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-        {/* LEFT SIDE: LOTTIE ANIMATION */}
+        {/* Left side: Lottie */}
         <div className="hidden md:flex items-center justify-center bg-linear-to-br from-emerald-100 to-teal-100 p-6">
-          <DotLottieReact src="/Login.json" loop autoplay />
+          <DotLottieReact src="../../src/assets/Login.json" loop autoplay />
         </div>
 
-        {/* RIGHT SIDE: LOGIN FORM  */}
+        {/* Right side: Form */}
         <form onSubmit={handleLogin} className="p-8 md:p-10">
           <h2 className="text-3xl font-bold text-center">Welcome Back</h2>
           <p className="text-center text-gray-500 mb-6">
             Log in to your TravelEase account
           </p>
 
-          {/* Email Field */}
+          {/* Email */}
           <div className="form-control w-full mb-4">
             <span className="label-text">Email</span>
             <div className="relative">
@@ -87,7 +111,7 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div className="form-control w-full mb-4">
             <span className="label-text">Password</span>
             <div className="relative mt-1">
@@ -99,8 +123,6 @@ export default function Login() {
                 className="input input-bordered w-full pl-12 pr-12"
                 required
               />
-
-              {/* Show/Hide Password */}
               <button
                 type="button"
                 className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
@@ -113,7 +135,6 @@ export default function Login() {
                 )}
               </button>
             </div>
-
             <div className="flex justify-end mt-1">
               <Link
                 to="/forgot-password"
@@ -132,23 +153,21 @@ export default function Login() {
             Sign In
           </button>
 
-          {/* Divider */}
           <div className="divider my-6 text-sm">Or continue with</div>
 
-          {/* Social Login */}
+          {/* Social Buttons */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <button
               type="button"
+              onClick={() => handleSocialLogin('google')}
               className="btn btn-outline w-full flex items-center gap-2"
-              onClick={handleGoogleSignIn}
             >
-              <FcGoogle className="text-lg " /> Google
+              <FcGoogle className="text-lg" /> Google
             </button>
-
             <button
               type="button"
+              onClick={() => handleSocialLogin('github')}
               className="btn btn-outline w-full flex items-center gap-2"
-              onClick={handleGithubSignIn}
             >
               <FaGithub className="text-lg text-blue-600" /> GitHub
             </button>

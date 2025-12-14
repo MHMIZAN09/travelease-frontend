@@ -10,15 +10,26 @@ import Packages from '../pages/Packages';
 
 import CreateDestination from '../pages/admin/CreateDestination';
 import DestinationsPage from '../pages/DestinationsPage';
-import CreatePackageForm from '../pages/admin/CreatePackage';
-import PackagesByDestination from '../pages/PackagesByDestination';
+
 import PackageDetails from '../pages/PackageDetails';
 import UserBooking from '../pages/user/UserBooking';
-import UserDashboard from '../pages/user/UserDashboard';
+
 import UserProfile from '../pages/user/UserProfile';
 import PrivateRoute from './PrivateRoute';
 import AdminDashboard from './../pages/admin/AdminDashboard';
 import AllUsers from '../pages/admin/UsersTable';
+import CreatePackage from './../pages/admin/CreatePackage';
+import ManageUsers from './../pages/admin/ManageUsers';
+import ManagePackages from '../pages/admin/ManagePackages';
+import ManageDestinations from '../pages/admin/ManageDestinations';
+import Booking from '../pages/BookingPage';
+import BookingSuccess from '../pages/BookingSuccess';
+import DashboardHome from '../pages/user/DashboardHome';
+import UserDashboardLayout from '../pages/user/DashboardLayout';
+import UserPayments from '../pages/user/UserPayments';
+import AdminDashboardLayout from '../pages/admin/AdminDashboardLayout';
+import AllBookings from '../pages/admin/AllBookings';
+import ForgotPassword from '../pages/ForgotPassword';
 
 const route = createBrowserRouter([
   {
@@ -32,6 +43,10 @@ const route = createBrowserRouter([
       {
         path: 'login',
         element: <Login />,
+      },
+      {
+        path: 'forgot-password',
+        element: <ForgotPassword />,
       },
       {
         path: 'register',
@@ -59,10 +74,6 @@ const route = createBrowserRouter([
       },
 
       {
-        path: 'packages/destination/:destinationId',
-        element: <PackagesByDestination />,
-      },
-      {
         path: 'packages/:id',
         element: <PackageDetails />,
       },
@@ -71,15 +82,50 @@ const route = createBrowserRouter([
         path: 'dashboard',
         element: (
           <PrivateRoute>
-            <UserDashboard />
+            <UserDashboardLayout />
+          </PrivateRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <DashboardHome />,
+          },
+          {
+            path: 'profile',
+            element: <UserProfile />,
+          },
+          {
+            path: 'my-bookings',
+            element: <UserBooking />,
+          },
+          {
+            path: 'payments',
+            element: <UserPayments />,
+          },
+        ],
+      },
+
+      {
+        path: 'my-bookings',
+        element: (
+          <PrivateRoute>
+            <UserBooking />
           </PrivateRoute>
         ),
       },
       {
-        path: 'bookings',
+        path: 'booking/:id',
         element: (
           <PrivateRoute>
-            <UserBooking />
+            <Booking />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: 'booking-success/:id',
+        element: (
+          <PrivateRoute>
+            <BookingSuccess />
           </PrivateRoute>
         ),
       },
@@ -93,10 +139,39 @@ const route = createBrowserRouter([
       },
 
       // ADMIN
-
       {
-        path: 'admin/dashboard',
-        element: <AdminDashboard />,
+        path: '/admin',
+        element: <AdminDashboardLayout />,
+        children: [
+          {
+            path: 'dashboard',
+            element: <AdminDashboard />,
+          },
+          {
+            path: 'manageUsers',
+            element: <ManageUsers />,
+          },
+          {
+            path: 'managePackages',
+            element: <ManagePackages />,
+          },
+          {
+            path: 'createPackage',
+            element: <CreatePackage />,
+          },
+          {
+            path: 'manageDestinations',
+            element: <ManageDestinations />,
+          },
+          {
+            path: 'createDestination',
+            element: <CreateDestination />,
+          },
+          {
+            path: 'bookings',
+            element: <AllBookings />,
+          },
+        ],
       },
       {
         path: 'admin/users',
@@ -104,16 +179,23 @@ const route = createBrowserRouter([
       },
       {
         path: 'admin/createPackage',
-        element: <CreateDestination />,
+        element: <CreatePackage />,
       },
-
+      {
+        path: 'admin/manageUsers',
+        element: <ManageUsers />,
+      },
       {
         path: 'admin/managePackages',
-        element: <div>manage packages</div>,
+        element: <ManagePackages />,
+      },
+      {
+        path: 'admin/manageDestinations',
+        element: <ManageDestinations />,
       },
       {
         path: 'admin/createDestinations',
-        element: <div>create destinations</div>,
+        element: <CreateDestination />,
       },
       {
         path: 'admin/manageDestinations',
