@@ -8,7 +8,8 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../components/provider/AuthProvider';
 import axios from 'axios';
-
+import loginAnimation from '../assets/Login.json';
+import Lottie from 'lottie-react';
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const {
@@ -86,7 +87,7 @@ export default function Login() {
       <div className="w-full max-w-5xl bg-base-100 shadow-xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
         {/* Left side: Lottie */}
         <div className="hidden md:flex items-center justify-center bg-linear-to-br from-emerald-100 to-teal-100 p-6">
-          <DotLottieReact src="../../src/assets/Login.json" loop autoplay />
+          <Lottie animationData={loginAnimation} loop autoplay />;
         </div>
 
         {/* Right side: Form */}
