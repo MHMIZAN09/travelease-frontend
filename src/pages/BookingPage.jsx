@@ -34,7 +34,9 @@ export default function Booking() {
   useEffect(() => {
     const fetchPackage = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/packages/${id}`);
+        const res = await axios.get(
+          `https://travelease-backend.vercel.app/api/packages/${id}`
+        );
         setPkg(res.data.data);
 
         if (user) {
@@ -84,7 +86,7 @@ export default function Booking() {
       };
 
       const res = await axios.post(
-        'http://localhost:5000/api/bookings',
+        'https://travelease-backend.vercel.app/api/bookings',
         payload
       );
 

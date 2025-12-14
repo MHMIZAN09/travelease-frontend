@@ -19,7 +19,9 @@ export default function Packages() {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/packages');
+        const res = await axios.get(
+          'https://travelease-backend.vercel.app/api/packages'
+        );
         setPackages(res.data.data || []);
         console.log(res.data.data);
       } catch (error) {

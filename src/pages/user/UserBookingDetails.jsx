@@ -18,7 +18,7 @@ export default function UserBookingDetails() {
     const fetchBooking = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/bookings/${id}`,
+          `https://travelease-backend.vercel.app/api/bookings/${id}`,
           {
             headers: {
               Authorization: `Bearer ${await user.getIdToken()}`,

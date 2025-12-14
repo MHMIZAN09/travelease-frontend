@@ -11,7 +11,9 @@ export default function BookingSuccess() {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/bookings/${id}`);
+        const res = await axios.get(
+          `https://travelease-backend.vercel.app/api/bookings/${id}`
+        );
         setBooking(res.data.data);
       } catch (err) {
         toast.error('Failed to fetch booking');

@@ -20,7 +20,7 @@ export default function ContactMap() {
         }}
         style={{ width: '100%', height: '100%' }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
-        mapboxAccessToken=""
+        mapboxAccessToken="pk.eyJ1IjoibWhtaXphbiIsImEiOiJjbWhmd215bmUwOHp5MmpxdDU5OW1yM3J2In0.Yuv4YfCgxzpgk0X5dwvwrg"
       >
         <NavigationControl position="top-right" />
 

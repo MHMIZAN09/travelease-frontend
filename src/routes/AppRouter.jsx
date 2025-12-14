@@ -10,11 +10,10 @@ import Packages from '../pages/Packages';
 
 import CreateDestination from '../pages/admin/CreateDestination';
 import DestinationsPage from '../pages/DestinationsPage';
-import CreatePackageForm from '../pages/admin/CreatePackage';
-import PackagesByDestination from '../pages/PackagesByDestination';
+
 import PackageDetails from '../pages/PackageDetails';
 import UserBooking from '../pages/user/UserBooking';
-import UserDashboard from '../pages/user/UserDashboard';
+
 import UserProfile from '../pages/user/UserProfile';
 import PrivateRoute from './PrivateRoute';
 import AdminDashboard from './../pages/admin/AdminDashboard';
@@ -74,10 +73,6 @@ const route = createBrowserRouter([
         element: <CreateDestination />,
       },
 
-      {
-        path: 'packages/destination/:destinationId',
-        element: <PackagesByDestination />,
-      },
       {
         path: 'packages/:id',
         element: <PackageDetails />,

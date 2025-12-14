@@ -20,7 +20,7 @@ export default function Destinations() {
     const fetchDestinations = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:5000/api/destinations'
+          'https://travelease-backend.vercel.app/api/destinations'
         );
         console.log('Fetched destinations:', response.data.data);
         setDestinations(response.data.data || []);

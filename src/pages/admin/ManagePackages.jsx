@@ -18,7 +18,9 @@ export default function ManagePackages() {
   // Fetch packages
   const fetchPackages = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/packages');
+      const res = await axios.get(
+        'https://travelease-backend.vercel.app/api/packages'
+      );
       setPackages(res.data.data || []);
       setLoading(false);
     } catch (err) {
@@ -31,7 +33,9 @@ export default function ManagePackages() {
   // Fetch destinations
   const fetchDestinations = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/destinations');
+      const res = await axios.get(
+        'https://travelease-backend.vercel.app/api/destinations'
+      );
       setDestinations(res.data.data || []);
     } catch (err) {
       console.error(err);
@@ -82,7 +86,7 @@ export default function ManagePackages() {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/packages/${editingPackage._id}`,
+        `https://travelease-backend.vercel.app/api/packages/${editingPackage._id}`,
         updatedPackage
       );
       toast.success('Package updated successfully!');
@@ -99,7 +103,7 @@ export default function ManagePackages() {
     if (!deletePackageId) return;
     try {
       await axios.delete(
-        `http://localhost:5000/api/packages/${deletePackageId}`
+        `https://travelease-backend.vercel.app/api/packages/${deletePackageId}`
       );
       toast.success('Package deleted successfully!');
       setPackages(packages.filter((p) => p._id !== deletePackageId));

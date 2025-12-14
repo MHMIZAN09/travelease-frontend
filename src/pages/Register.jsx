@@ -51,7 +51,7 @@ export default function Register() {
       });
 
       // Save user to backend
-      await axios.post('http://localhost:5000/api/users', {
+      await axios.post('https://travelease-backend.vercel.app/api/users', {
         name: user.displayName,
         email: user.email,
         uid: user.uid,
@@ -79,14 +79,17 @@ export default function Register() {
       const user = result.user;
 
       // Save user to backend (create if doesn't exist)
-      const res = await axios.post('http://localhost:5000/api/users', {
-        name: user.displayName || 'No Name',
-        email: user.email,
-        uid: user.uid,
-        photoURL: user.photoURL || 'https://example.com/default-avatar.png',
-        provider: provider,
-        role: 'customer',
-      });
+      const res = await axios.post(
+        'https://travelease-backend.vercel.app/api/users',
+        {
+          name: user.displayName || 'No Name',
+          email: user.email,
+          uid: user.uid,
+          photoURL: user.photoURL || 'https://example.com/default-avatar.png',
+          provider: provider,
+          role: 'customer',
+        }
+      );
 
       toast.success(`Welcome ${res.data.data.name || 'User'}!`);
       navigate('/');

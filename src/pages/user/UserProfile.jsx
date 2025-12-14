@@ -38,7 +38,7 @@ export default function UserProfile() {
         if (!auth.currentUser) return;
         const token = await auth.currentUser.getIdToken();
         const res = await axios.get(
-          `http://localhost:5000/api/users/${auth.currentUser.uid}`,
+          `https://travelease-backend.vercel.app/api/users/${auth.currentUser.uid}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const data = res.data.data;
@@ -85,8 +85,10 @@ export default function UserProfile() {
     try {
       const token = await auth.currentUser.getIdToken();
       const res = await axios.put(
-        `http://localhost:5000/api/users/${auth.currentUser.uid}`,
+        `https://travelease-backend.vercel.app/api/users/${auth.currentUser.uid}`,
         formData,
+
+        { withCredentials: true },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setProfile(res.data.data);

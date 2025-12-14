@@ -1,10 +1,41 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AuthContext } from './provider/AuthProvider';
 
 export default function DestinationForm() {
   const { user } = useContext(AuthContext);
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [uploading, setUploading] = useState(false);
+
+  const imgbbApiKey = '92e1c9de53c667fa27340a69930020cb';
+
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    setUploading(true);
+    try {
+      const urls = [];
+      for (let file of files) {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const res = await axios.post(
+          `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`,
+          formData
+        );
+        urls.push(res.data.data.url);
+      }
+      setUploadedImages((prev) => [...prev, ...urls]);
+      toast.success('Images uploaded successfully!');
+    } catch (err) {
+      console.error(err);
+      toast.error('Image upload failed.');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,9 +45,7 @@ export default function DestinationForm() {
       name: form.name.value,
       division: form.division.value || 'Not specified',
       category: form.category.value || 'Nature',
-      images: form.images.value
-        ? form.images.value.split(',').map((url) => url.trim())
-        : [],
+      images: uploadedImages, // use uploaded images from imgBB
       description: form.description.value,
       attractions: form.attractions.value
         ? form.attractions.value.split(',').map((a) => a.trim())
@@ -31,11 +60,12 @@ export default function DestinationForm() {
 
     try {
       await axios.post(
-        'http://localhost:5000/api/destinations',
+        'https://travelease-backend.vercel.app/api/destinations',
         newDestination
       );
       toast.success('Destination created successfully!');
       form.reset();
+      setUploadedImages([]);
     } catch (error) {
       toast.error('Failed to create destination.');
       console.error(error);
@@ -79,12 +109,30 @@ export default function DestinationForm() {
             <option value="Nature">Nature</option>
           </select>
 
-          <input
-            name="images"
-            type="text"
-            placeholder="Image URLs (comma separated)"
-            className="input input-bordered w-full"
-          />
+          {/* Image Upload */}
+          <div>
+            <label className="block mb-2 font-medium">Upload Images</label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageUpload}
+              className="input input-bordered w-full"
+            />
+            {uploading && (
+              <p className="text-sm text-gray-500 mt-1">Uploading...</p>
+            )}
+            <div className="flex flex-wrap mt-2 gap-2">
+              {uploadedImages.map((url, idx) => (
+                <img
+                  key={idx}
+                  src={url}
+                  alt={`Destination ${idx}`}
+                  className="w-24 h-24 object-cover rounded-lg shadow"
+                />
+              ))}
+            </div>
+          </div>
 
           <textarea
             name="description"
@@ -124,7 +172,7 @@ export default function DestinationForm() {
 
           <button
             type="submit"
-            className="btn w-full bg-linear-to-r from-blue-600 to-teal-500 text-white hover:from-blue-700 hover:to-teal-600"
+            className="btn w-full bg-emerald-600 hover:bg-emerald-700 text-white"
           >
             Create Destination
           </button>

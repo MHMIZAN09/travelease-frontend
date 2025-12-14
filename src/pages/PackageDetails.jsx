@@ -15,7 +15,9 @@ export default function PackageDetails() {
   useEffect(() => {
     const fetchPackage = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/packages/${id}`);
+        const res = await axios.get(
+          `https://travelease-backend.vercel.app/api/packages/${id}`
+        );
         setPkg(res.data.data);
       } catch (err) {
         toast.error('Failed to fetch package details');
@@ -145,35 +147,132 @@ export default function PackageDetails() {
               )}
             </div>
 
-            <div className="mt-6 text-gray-700 space-y-4">
+            <div className="mt-6 text-gray-700 space-y-6">
+              {/* Description */}
               {activeTab === 'description' && (
-                <p className="text-lg">{pkg.description}</p>
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                    Package Overview
+                  </h2>
+                  <p className="text-gray-700 text-lg leading-relaxed">
+                    {pkg.description}
+                  </p>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-emerald-50 p-4 rounded-xl shadow hover:shadow-lg transition">
+                      <h3 className="font-semibold text-emerald-600 mb-1">
+                        Destination
+                      </h3>
+                      <p className="text-gray-700">{pkg.destination?.name}</p>
+                    </div>
+                    <div className="bg-emerald-50 p-4 rounded-xl shadow hover:shadow-lg transition">
+                      <h3 className="font-semibold text-emerald-600 mb-1">
+                        Duration
+                      </h3>
+                      <p className="text-gray-700">{durationText}</p>
+                    </div>
+                    <div className="bg-emerald-50 p-4 rounded-xl shadow hover:shadow-lg transition">
+                      <h3 className="font-semibold text-emerald-600 mb-1">
+                        Group Size
+                      </h3>
+                      <p className="text-gray-700">{pkg.groupSize} pax</p>
+                    </div>
+                    <div className="bg-emerald-50 p-4 rounded-xl shadow hover:shadow-lg transition">
+                      <h3 className="font-semibold text-emerald-600 mb-1">
+                        Rating
+                      </h3>
+                      <p className="text-gray-700 flex items-center gap-1">
+                        <Star className="text-yellow-400 w-5 h-5" />{' '}
+                        {pkg.rating ?? 0}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               )}
+
+              {/* Itinerary */}
               {activeTab === 'itinerary' && (
-                <ul className="list-decimal list-inside space-y-1 text-gray-700">
-                  {pkg.itinerary?.map((item, idx) => (
-                    <li key={idx}>
-                      <span className="font-semibold text-gray-800">
-                        {item.title}:
-                      </span>{' '}
-                      {item.details}
-                    </li>
-                  ))}
-                </ul>
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                    Itinerary
+                  </h2>
+                  <div className="space-y-3">
+                    {pkg.itinerary?.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-white p-4 rounded-xl shadow hover:shadow-lg transition"
+                      >
+                        <h3 className="font-semibold text-emerald-600">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-700 mt-1">{item.details}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
+
+              {/* Included */}
               {activeTab === 'included' && (
-                <ul className="list-disc list-inside text-gray-700">
-                  {pkg.included?.map((inc, idx) => (
-                    <li key={idx}>{inc}</li>
-                  ))}
-                </ul>
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                    What's Included
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {pkg.included?.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-3 p-4 bg-white rounded-xl shadow hover:shadow-lg transition"
+                      >
+                        <svg
+                          className="w-6 h-6 text-emerald-600 flex-shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        <p className="text-gray-700 font-medium">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
+
+              {/* Excluded */}
               {activeTab === 'excluded' && (
-                <ul className="list-disc list-inside text-gray-700">
-                  {pkg.excluded?.map((exc, idx) => (
-                    <li key={idx}>{exc}</li>
-                  ))}
-                </ul>
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                    What's Not Included
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {pkg.excluded?.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-3 p-4 bg-white rounded-xl shadow hover:shadow-lg transition"
+                      >
+                        <svg
+                          className="w-6 h-6 text-red-500 flex-shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                        <p className="text-gray-700 font-medium">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
           </div>

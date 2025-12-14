@@ -58,14 +58,17 @@ export default function Login() {
       const user = result.user;
 
       // Send to backend: create if doesn't exist
-      const res = await axios.post('http://localhost:5000/api/users', {
-        name: user.displayName || 'No Name',
-        email: user.email,
-        uid: user.uid,
-        photoURL: user.photoURL,
-        provider: provider,
-        role: 'customer',
-      });
+      const res = await axios.post(
+        'https://travelease-backend.vercel.app/api/users',
+        {
+          name: user.displayName || 'No Name',
+          email: user.email,
+          uid: user.uid,
+          photoURL: user.photoURL,
+          provider: provider,
+          role: 'customer',
+        }
+      );
 
       const loggedUser = res.data.data;
       toast.success(`Welcome ${loggedUser.name || 'User'}!`);
@@ -83,7 +86,7 @@ export default function Login() {
       <div className="w-full max-w-5xl bg-base-100 shadow-xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
         {/* Left side: Lottie */}
         <div className="hidden md:flex items-center justify-center bg-linear-to-br from-emerald-100 to-teal-100 p-6">
-          <DotLottieReact src="/Login.json" loop autoplay />
+          <DotLottieReact src="../../src/assets/Login.json" loop autoplay />
         </div>
 
         {/* Right side: Form */}
