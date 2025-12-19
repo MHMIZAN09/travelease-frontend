@@ -54,7 +54,7 @@ export default function BookingPage() {
       navigate('/login');
     }
 
-    if (user?.role !== 'customer') {
+    if (user?.role !== 'admin') {
       toast.info(t('customerOnly', 'Only customers can make bookings'));
       navigate('/');
     }
