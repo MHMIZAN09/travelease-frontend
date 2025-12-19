@@ -52,7 +52,8 @@ export default function UserBooking() {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentBookings = bookings.slice(startIndex, endIndex);
 
-  const getStatusBadge = (status) => {
+  // Payment status badge
+  const getPaymentBadge = (status) => {
     switch (status) {
       case 'pending':
         return (
@@ -60,16 +61,10 @@ export default function UserBooking() {
             <FaClock /> Pending
           </span>
         );
-      case 'confirmed':
+      case 'succeeded':
         return (
           <span className="flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
-            <FaCheckCircle /> Confirmed
-          </span>
-        );
-      case 'canceled':
-        return (
-          <span className="flex items-center gap-1 bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold">
-            <FaTimesCircle /> Canceled
+            <FaCheckCircle /> Paid
           </span>
         );
       default:
@@ -84,7 +79,7 @@ export default function UserBooking() {
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center text-gray-500 text-lg">
-        Loading your bookings...
+        <span className="loading loading-spinner loading-xl text-emerald-500"></span>
       </div>
     );
   }
@@ -99,7 +94,7 @@ export default function UserBooking() {
   }
 
   return (
-    <div className="min-h-screen p-6 ">
+    <div className="min-h-screen p-6">
       <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">
         My Bookings
       </h1>
@@ -118,7 +113,7 @@ export default function UserBooking() {
                 Total Price
               </th>
               <th className="px-6 py-3 text-left text-xs font-bold uppercase">
-                Status
+                Payment Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-bold uppercase">
                 Notes
@@ -138,7 +133,9 @@ export default function UserBooking() {
                 <td className="px-6 py-4 font-semibold text-gray-800">
                   BDT {b.totalAmount}
                 </td>
-                <td className="px-6 py-4">{getStatusBadge(b.bookingStatus)}</td>
+                <td className="px-6 py-4">
+                  {getPaymentBadge(b.paymentStatus)}
+                </td>
                 <td className="px-6 py-4 text-gray-600">{b.notes || ''}</td>
               </tr>
             ))}
