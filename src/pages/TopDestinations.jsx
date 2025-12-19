@@ -12,7 +12,7 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-const API_URL = 'https://travelease-backend.vercel.app/';
+const API_URL = 'https://travelease-backend.vercel.app';
 
 export default function TopDestinations() {
   const { t } = useTranslation();
