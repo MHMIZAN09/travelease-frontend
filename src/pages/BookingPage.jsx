@@ -13,7 +13,8 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL =
+  import.meta.env.VITE_API_URL || 'https://travelease-backend.vercel.app/';
 
 export default function BookingPage() {
   const { t } = useTranslation();
