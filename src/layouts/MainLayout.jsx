@@ -4,10 +4,14 @@ import Footer from '../components/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ScrollToTop from '../components/ScrollToTop';
+import BackToTop from 'react-scroll-to-top';
+import BackToTopProgress from '../components/BackToTopProgress';
 
 export default function MainLayout() {
   return (
     <>
+      <BackToTopProgress />
+
       <ScrollToTop />
       <div className="flex flex-col min-h-screen bg-gray-50">
         {/* Navbar */}
