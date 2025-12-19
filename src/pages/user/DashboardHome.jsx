@@ -19,9 +19,9 @@ export default function DashboardHome() {
   const [stats, setStats] = useState({
     totalBookings: 0,
     totalSpent: 0,
-    confirmed: 0,
+    succeeded: 0,
     pending: 0,
-    canceled: 0,
+    failed: 0,
   });
 
   const [loading, setLoading] = useState(true);
@@ -37,12 +37,20 @@ export default function DashboardHome() {
 
         const data = res.data?.data || [];
 
+        // Filter only succeeded bookings for totalSpent
+        const succeededBookings = data.filter(
+          (b) => b.paymentStatus === 'succeeded'
+        );
+
         setStats({
           totalBookings: data.length,
-          totalSpent: data.reduce((s, b) => s + (b.totalAmount || 0), 0),
-          confirmed: data.filter((b) => b.bookingStatus === 'confirmed').length,
-          pending: data.filter((b) => b.bookingStatus === 'pending').length,
-          canceled: data.filter((b) => b.bookingStatus === 'canceled').length,
+          totalSpent: succeededBookings.reduce(
+            (s, b) => s + (b.totalAmount || 0),
+            0
+          ),
+          succeeded: succeededBookings.length,
+          pending: data.filter((b) => b.paymentStatus === 'pending').length,
+          failed: data.filter((b) => b.paymentStatus === 'failed').length,
         });
       } catch (err) {
         console.error(err);
@@ -63,9 +71,9 @@ export default function DashboardHome() {
   }
 
   const chartData = [
-    { name: 'Confirmed', value: stats.confirmed },
+    { name: 'Paid', value: stats.succeeded },
     { name: 'Pending', value: stats.pending },
-    { name: 'Canceled', value: stats.canceled },
+    { name: 'Failed', value: stats.failed },
   ];
 
   return (
@@ -94,8 +102,8 @@ export default function DashboardHome() {
         />
         <StatCard
           icon={<CalendarCheck />}
-          label="Confirmed"
-          value={stats.confirmed}
+          label="Paid"
+          value={stats.succeeded}
           gradient="from-green-500 to-emerald-600"
         />
         <StatCard
@@ -106,9 +114,9 @@ export default function DashboardHome() {
         />
       </div>
 
-      {/* Booking Status Graph */}
+      {/* Payment Status Graph */}
       <div className="bg-white rounded-2xl p-6 shadow">
-        <h2 className="text-xl font-semibold mb-4">Booking Status Overview</h2>
+        <h2 className="text-xl font-semibold mb-4">Payment Status Overview</h2>
 
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData}>
@@ -116,7 +124,12 @@ export default function DashboardHome() {
             <XAxis dataKey="name" />
             <YAxis allowDecimals={false} />
             <Tooltip />
-            <Bar dataKey="value" radius={[8, 8, 0, 0]} />
+            <Bar
+              dataKey="value"
+              radius={[8, 8, 0, 0]}
+              fill="#10b981"
+              background={{ fill: '#f3f4f6' }}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -128,7 +141,7 @@ export default function DashboardHome() {
 function StatCard({ icon, label, value, gradient }) {
   return (
     <div
-      className={`bg-gradient-to-r ${gradient} text-white p-6 rounded-2xl shadow-lg`}
+      className={`bg-linear-to-r ${gradient} text-white p-6 rounded-2xl shadow-lg`}
     >
       <div className="mb-3">{icon}</div>
       <p className="text-sm opacity-90">{label}</p>

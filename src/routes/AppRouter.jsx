@@ -32,6 +32,9 @@ import AllBookings from '../pages/admin/AllBookings';
 import ForgotPassword from '../pages/ForgotPassword';
 import PaymentCancel from '../pages/PaymentCancel';
 import PaymentSuccess from '../pages/PaymentSuccess';
+import PrivacyPolicy from '../components/PrivacyPolicy';
+import TermsOfService from '../components/TermsOfService';
+import CancellationPolicy from '../components/CancellationPolicy';
 
 const route = createBrowserRouter([
   {
@@ -69,6 +72,18 @@ const route = createBrowserRouter([
       {
         path: 'destination',
         element: <DestinationsPage />,
+      },
+      {
+        path: 'privacy-policy',
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: 'terms',
+        element: <TermsOfService />,
+      },
+      {
+        path: 'cancellation-policy',
+        element: <CancellationPolicy />,
       },
       {
         path: 'addDestination',

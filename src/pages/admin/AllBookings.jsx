@@ -75,7 +75,7 @@ export default function AllBookings() {
     );
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-indigo-700">All Bookings</h1>
 
       <input
@@ -86,8 +86,8 @@ export default function AllBookings() {
         className="mb-4 input input-bordered w-full max-w-md border-indigo-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 rounded-lg"
       />
 
-      <div className="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-200">
-        <table className="min-w-full text-left border-collapse">
+      <div className="overflow-x-auto  rounded-xl shadow-lg border border-gray-200">
+        <table className="w-full text-left border-collapse">
           <thead className="bg-indigo-100 sticky top-0 z-10">
             <tr>
               <th className="px-6 py-3">User / Email</th>
@@ -107,7 +107,10 @@ export default function AllBookings() {
                   className="hover:bg-indigo-50 transition border-b border-gray-100"
                 >
                   <td className="px-6 py-3">
-                    {b.user?.displayName || b.user?.email}
+                    {b.user?.name ??
+                      b.user?.displayName ??
+                      b.user?.email ??
+                      'Unknown'}
                   </td>
                   <td className="px-6 py-3">{b.package?.title || 'N/A'}</td>
                   <td className="px-6 py-3">
