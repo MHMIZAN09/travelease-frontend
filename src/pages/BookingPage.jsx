@@ -64,7 +64,9 @@ export default function BookingPage() {
   useEffect(() => {
     const fetchPackage = async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/packages/${id}`);
+        const res = await axios.get(
+          `https://travelease-backend.vercel.app/api/packages/${id}`
+        );
         setPkg(res.data.data || res.data);
       } catch (err) {
         toast.error(t('failedLoadPackage', 'Failed to load package details'));
@@ -116,7 +118,10 @@ export default function BookingPage() {
         specialRequests: formData.notes,
       };
 
-      const res = await axios.post(`${API_URL}/api/bookings`, payload);
+      const res = await axios.post(
+        `https://travelease-backend.vercel.app/api/bookings`,
+        payload
+      );
 
       if (res.data.checkoutUrl) {
         window.location.href = res.data.checkoutUrl;
