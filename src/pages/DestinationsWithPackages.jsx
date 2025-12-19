@@ -37,8 +37,8 @@ export default function DestinationsWithPackages() {
     const fetchData = async () => {
       try {
         const [destRes, pkgRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/destinations'),
-          axios.get('http://localhost:5000/api/packages'),
+          axios.get('https://travelease-backend.vercel.app/api/destinations'),
+          axios.get('https://travelease-backend.vercel.app/api/packages'),
         ]);
         setDestinations(destRes.data.data || []);
         setPackages(pkgRes.data.data || []);

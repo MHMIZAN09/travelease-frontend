@@ -19,7 +19,9 @@ export default function ManageDestinations() {
   // Fetch all destinations
   const fetchDestinations = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/destinations');
+      const res = await axios.get(
+        'https://travelease-backend.vercel.app/api/destinations'
+      );
       setDestinations(res.data.data || []);
       setLoading(false);
     } catch (err) {
@@ -46,7 +48,7 @@ export default function ManageDestinations() {
         images: editingDestination.images || [],
       };
       await axios.put(
-        `http://localhost:5000/api/destinations/${editingDestination._id}`,
+        `https://travelease-backend.vercel.app/api/destinations/${editingDestination._id}`,
         updatedDestination
       );
       toast.success('Destination updated successfully!');
@@ -63,7 +65,7 @@ export default function ManageDestinations() {
     if (!deleteDestinationId) return;
     try {
       await axios.delete(
-        `http://localhost:5000/api/destinations/${deleteDestinationId}`
+        `https://travelease-backend.vercel.app/api/destinations/${deleteDestinationId}`
       );
       toast.success('Destination deleted successfully!');
       setDestinations(

@@ -13,7 +13,9 @@ export default function AllBookings() {
 
   const fetchBookings = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/bookings');
+      const res = await axios.get(
+        'https://travelease-backend.vercel.app/api/bookings'
+      );
       setBookings(res.data.data || []);
     } catch (err) {
       console.error(err);
@@ -30,9 +32,12 @@ export default function AllBookings() {
   const updateStatus = async (bookingId, newStatus) => {
     setUpdatingId(bookingId);
     try {
-      await axios.put(`http://localhost:5000/api/bookings/${bookingId}`, {
-        bookingStatus: newStatus,
-      });
+      await axios.put(
+        `https://travelease-backend.vercel.app/api/bookings/${bookingId}`,
+        {
+          bookingStatus: newStatus,
+        }
+      );
       setBookings((prev) =>
         prev.map((b) =>
           b._id === bookingId ? { ...b, bookingStatus: newStatus } : b

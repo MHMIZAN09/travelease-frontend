@@ -50,7 +50,10 @@ export default function DestinationForm() {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/destinations', payload);
+      await axios.post(
+        'https://travelease-backend.vercel.app/api/destinations',
+        payload
+      );
       toast.success('Destination created successfully!');
       form.reset();
       setUploadedImages([]);
