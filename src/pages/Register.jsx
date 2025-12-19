@@ -106,14 +106,17 @@ export default function Register() {
   // Save user to backend
   const saveUserToBackend = async (user, provider, email) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/users', {
-        name: user.displayName || t('noName'),
-        email,
-        uid: user.uid,
-        photoURL: user.photoURL || 'https://example.com/default-avatar.png',
-        provider,
-        role: 'customer',
-      });
+      const res = await axios.post(
+        'https://travelease-backend.vercel.app/api/users',
+        {
+          name: user.displayName || t('noName'),
+          email,
+          uid: user.uid,
+          photoURL: user.photoURL || 'https://example.com/default-avatar.png',
+          provider,
+          role: 'customer',
+        }
+      );
 
       toast.success(
         t('welcomeUser', { name: res.data.data.name || t('user') })

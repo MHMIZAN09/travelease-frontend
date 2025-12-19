@@ -30,9 +30,9 @@ export default function AdminDashboard() {
       setLoading(true);
 
       const [packagesRes, usersRes, bookingsRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/packages'),
-        axios.get('http://localhost:5000/api/users'),
-        axios.get('http://localhost:5000/api/bookings'),
+        axios.get('https://travelease-backend.vercel.app/api/packages'),
+        axios.get('https://travelease-backend.vercel.app/api/users'),
+        axios.get('https://travelease-backend.vercel.app/api/bookings'),
       ]);
 
       const packagesData = packagesRes.data.data || [];

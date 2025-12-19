@@ -16,7 +16,7 @@ export default function UserPayments() {
     const fetchPayments = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/bookings/user/${
+          `https://travelease-backend.vercel.app/api/bookings/user/${
             user._id || user.uid
           }/payments`
         );

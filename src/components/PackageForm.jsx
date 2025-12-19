@@ -15,7 +15,9 @@ export default function PackageForm() {
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/destinations');
+        const res = await axios.get(
+          'https://travelease-backend.vercel.app/api/destinations'
+        );
         setDestinations(res.data.data || []);
       } catch {
         toast.error('Failed to load destinations');
@@ -88,7 +90,10 @@ export default function PackageForm() {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/packages', payload);
+      await axios.post(
+        'https://travelease-backend.vercel.app/api/packages',
+        payload
+      );
       toast.success('Package created successfully!');
       form.reset();
       setUploadedImages([]);

@@ -58,7 +58,7 @@ function AuthProvider({ children }) {
           const token = await firebaseUser.getIdToken();
 
           const res = await axios.get(
-            `http://localhost:5000/api/users/${firebaseUser.uid}`,
+            `https://travelease-backend.vercel.app/api/users/${firebaseUser.uid}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }

@@ -15,7 +15,7 @@ export default function PaymentSuccess() {
     const confirmPayment = async () => {
       try {
         const res = await axios.post(
-          'http://localhost:5000/api/bookings/confirm-payment',
+          'https://travelease-backend.vercel.app/api/bookings/confirm-payment',
           { session_id: sessionId }
         );
         setBooking(res.data.booking); // if your backend returns booking details
