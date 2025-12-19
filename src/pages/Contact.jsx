@@ -49,7 +49,7 @@ export default function Contact() {
     setLoading(true);
     try {
       await axios.post(
-        `https://travelease-backend.vercel.app/api/contact`,
+        `https://travelease-backend.vercel.app/api/contacts`,
         formData
       );
       toast.success(t('contactSuccess', 'Message sent successfully'));
