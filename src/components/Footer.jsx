@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import {
   Facebook,
   Youtube,
@@ -24,17 +25,39 @@ export default function Footer() {
               confidence. TravelEase is your trusted companion for unforgettable
               journeys.
             </p>
+
+            {/* Social Links */}
             <div className="flex gap-4">
-              <a href="#" className="hover:text-emerald-400 transition-colors">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-emerald-400 transition-colors"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-sky-400 transition-colors">
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-sky-400 transition-colors"
+              >
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-pink-500 transition-colors">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-pink-500 transition-colors"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-red-500 transition-colors">
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-red-500 transition-colors"
+              >
                 <Youtube className="h-5 w-5" />
               </a>
             </div>
@@ -46,18 +69,31 @@ export default function Footer() {
               Quick Links
             </h4>
             <ul className="space-y-2 text-sm">
-              {['About Us', 'Destinations', 'Packages', 'Blog', 'Contact'].map(
-                (item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
-                      className="hover:text-emerald-400 transition-colors"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                )
-              )}
+              <li>
+                <Link to="/about" className="hover:text-emerald-400">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/destination" className="hover:text-emerald-400">
+                  Destinations
+                </Link>
+              </li>
+              <li>
+                <Link to="/package" className="hover:text-emerald-400">
+                  Packages
+                </Link>
+              </li>
+              <li>
+                <Link to="#" className="hover:text-emerald-400">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-emerald-400">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -67,22 +103,34 @@ export default function Footer() {
               Support
             </h4>
             <ul className="space-y-2 text-sm">
-              {[
-                'Help Center',
-                'Privacy Policy',
-                'Terms of Service',
-                'Cancellation Policy',
-                'FAQs',
-              ].map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="hover:text-emerald-400 transition-colors"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link to="/help" className="hover:text-emerald-400">
+                  Help Center
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy-policy" className="hover:text-emerald-400">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="hover:text-emerald-400">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/cancellation-policy"
+                  className="hover:text-emerald-400"
+                >
+                  Cancellation Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="#" className="hover:text-emerald-400">
+                  FAQs
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -98,11 +146,18 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-emerald-400" />
-                <span>+880 1759-256744</span>
+                <a href="tel:+8801759256744" className="hover:text-emerald-400">
+                  +880 1759-256744
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-emerald-400" />
-                <span>info@travelease.com</span>
+                <a
+                  href="mailto:info@travelease.com"
+                  className="hover:text-emerald-400"
+                >
+                  info@travelease.com
+                </a>
               </li>
             </ul>
           </div>

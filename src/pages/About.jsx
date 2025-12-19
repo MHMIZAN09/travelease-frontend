@@ -55,7 +55,7 @@ export default function About() {
       </section>
 
       {/* FAQ SECTION */}
-      <section data-aos="fade-up" className="py-20">
+      <section data-aos="fade-up" className="py-20" id="faq">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-emerald-600 mb-4">
             {t('faqTitle')}

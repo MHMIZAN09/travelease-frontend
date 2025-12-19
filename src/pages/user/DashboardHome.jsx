@@ -141,7 +141,7 @@ export default function DashboardHome() {
 function StatCard({ icon, label, value, gradient }) {
   return (
     <div
-      className={`bg-gradient-to-r ${gradient} text-white p-6 rounded-2xl shadow-lg`}
+      className={`bg-linear-to-r ${gradient} text-white p-6 rounded-2xl shadow-lg`}
     >
       <div className="mb-3">{icon}</div>
       <p className="text-sm opacity-90">{label}</p>
