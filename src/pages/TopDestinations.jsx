@@ -23,8 +23,8 @@ export default function TopDestinations() {
     const fetchData = async () => {
       try {
         const [destRes, pkgRes] = await Promise.all([
-          axios.get(`${API_URL}/api/destinations`),
-          axios.get(`${API_URL}/api/packages`),
+          axios.get(`https://travelease-backend.vercel.app/api/destinations`),
+          axios.get(`https://travelease-backend.vercel.app/api/packages`),
         ]);
 
         const destinationList = destRes.data.data || [];
