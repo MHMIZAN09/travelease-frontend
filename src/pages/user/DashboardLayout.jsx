@@ -16,6 +16,9 @@ export default function UserDashboardLayout() {
         <h2 className="text-2xl font-bold text-blue-600 mb-8">TravelEase</h2>
 
         <nav className="space-y-4">
+          <NavLink to="." end className={linkClass}>
+            <FaUser /> Dashboard
+          </NavLink>
           <NavLink to="profile" className={linkClass}>
             <FaUser /> Profile
           </NavLink>

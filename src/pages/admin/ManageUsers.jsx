@@ -17,12 +17,9 @@ export default function ManageUsers() {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await axios.get(
-        'https://travelease-backend.vercel.app/api/users',
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await axios.get('http://localhost:5000/api/users', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setUsers(res.data.data || []);
     } catch (err) {
       console.error(err);

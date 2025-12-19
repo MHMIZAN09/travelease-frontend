@@ -5,6 +5,7 @@ import { AuthContext } from './provider/AuthProvider';
 
 export default function DestinationForm() {
   const { user } = useContext(AuthContext);
+
   const [uploadedImages, setUploadedImages] = useState([]);
   const [uploading, setUploading] = useState(false);
 
@@ -17,10 +18,9 @@ export default function DestinationForm() {
     setUploading(true);
     try {
       const urls = [];
-      for (let file of files) {
+      for (const file of files) {
         const formData = new FormData();
         formData.append('image', file);
-
         const res = await axios.post(
           `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`,
           formData
@@ -28,10 +28,9 @@ export default function DestinationForm() {
         urls.push(res.data.data.url);
       }
       setUploadedImages((prev) => [...prev, ...urls]);
-      toast.success('Images uploaded successfully!');
-    } catch (err) {
-      console.error(err);
-      toast.error('Image upload failed.');
+      toast.success('Images uploaded!');
+    } catch {
+      toast.error('Image upload failed');
     } finally {
       setUploading(false);
     }
@@ -41,139 +40,113 @@ export default function DestinationForm() {
     e.preventDefault();
     const form = e.target;
 
-    const newDestination = {
+    const payload = {
       name: form.name.value,
       division: form.division.value || 'Not specified',
-      category: form.category.value || 'Nature',
-      images: uploadedImages, // use uploaded images from imgBB
+      category: form.category.value,
       description: form.description.value,
-      attractions: form.attractions.value
-        ? form.attractions.value.split(',').map((a) => a.trim())
-        : [],
-      bestTime: form.bestTime.value,
-      howToReach: form.howToReach.value,
-      tags: form.tags.value
-        ? form.tags.value.split(',').map((t) => t.trim())
-        : [],
-      createdBy: user?._id || null,
+      images: uploadedImages,
+      createdBy: user?._id,
     };
 
     try {
-      await axios.post(
-        'https://travelease-backend.vercel.app/api/destinations',
-        newDestination
-      );
+      await axios.post('http://localhost:5000/api/destinations', payload);
       toast.success('Destination created successfully!');
       form.reset();
       setUploadedImages([]);
-    } catch (error) {
-      toast.error('Failed to create destination.');
-      console.error(error);
+    } catch {
+      toast.error('Failed to create destination');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-10">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          Create New Destination
+    <div className="min-h-screen py-12 px-4">
+      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+        <h2 className="text-3xl font-bold text-center mb-8 text-indigo-600">
+          Create Destination
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            name="name"
-            type="text"
-            placeholder="Destination Name"
-            className="input input-bordered w-full"
-            required
-          />
-
-          <input
-            name="division"
-            type="text"
-            placeholder="Division"
-            className="input input-bordered w-full"
-          />
-
-          <select
-            name="category"
-            className="input input-bordered w-full"
-            defaultValue="Nature"
-          >
-            <option value="Beach">Beach</option>
-            <option value="Hill">Hill</option>
-            <option value="Historical">Historical</option>
-            <option value="Adventure">Adventure</option>
-            <option value="Waterfall">Waterfall</option>
-            <option value="Urban">Urban</option>
-            <option value="Nature">Nature</option>
-          </select>
-
-          {/* Image Upload */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Name */}
           <div>
-            <label className="block mb-2 font-medium">Upload Images</label>
+            <label className="label">Destination Name</label>
+            <input
+              name="name"
+              placeholder="e.g. Cox's Bazar"
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
+
+          {/* Division */}
+          <div>
+            <label className="label">Division</label>
+            <input
+              name="division"
+              placeholder="e.g. Chittagong"
+              className="input input-bordered w-full"
+            />
+          </div>
+
+          {/* Category */}
+          <div>
+            <label className="label">Category</label>
+            <select
+              name="category"
+              className="select select-bordered w-full"
+              required
+            >
+              <option value="Beach">Beach</option>
+              <option value="Hill">Hill</option>
+              <option value="Historical">Historical</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Waterfall">Waterfall</option>
+              <option value="Urban">Urban</option>
+              <option value="Nature">Nature</option>
+            </select>
+          </div>
+
+          {/* Images */}
+          <div>
+            <label className="label">Images</label>
             <input
               type="file"
               accept="image/*"
               multiple
               onChange={handleImageUpload}
-              className="input input-bordered w-full"
+              className="file-input file-input-bordered w-full"
+              disabled={uploading}
+              required
             />
             {uploading && (
-              <p className="text-sm text-gray-500 mt-1">Uploading...</p>
+              <p className="text-sm text-gray-500 mt-1">Uploading images…</p>
             )}
-            <div className="flex flex-wrap mt-2 gap-2">
+            <div className="flex gap-3 mt-3 flex-wrap">
               {uploadedImages.map((url, idx) => (
                 <img
                   key={idx}
                   src={url}
-                  alt={`Destination ${idx}`}
-                  className="w-24 h-24 object-cover rounded-lg shadow"
+                  alt="Preview"
+                  className="w-24 h-24 rounded-lg object-cover shadow"
                 />
               ))}
             </div>
           </div>
 
-          <textarea
-            name="description"
-            placeholder="Description"
-            rows="3"
-            className="textarea textarea-bordered w-full"
-            required
-          />
+          {/* Description */}
+          <div>
+            <label className="label">Description</label>
+            <textarea
+              name="description"
+              rows={3}
+              placeholder="Short description of the destination"
+              className="textarea textarea-bordered w-full"
+              required
+            />
+          </div>
 
-          <input
-            name="attractions"
-            type="text"
-            placeholder="Attractions (comma separated)"
-            className="input input-bordered w-full"
-          />
-
-          <input
-            name="bestTime"
-            type="text"
-            placeholder="Best Time to Visit"
-            className="input input-bordered w-full"
-          />
-
-          <input
-            name="howToReach"
-            type="text"
-            placeholder="How to Reach"
-            className="input input-bordered w-full"
-          />
-
-          <input
-            name="tags"
-            type="text"
-            placeholder="Tags (comma separated)"
-            className="input input-bordered w-full"
-          />
-
-          <button
-            type="submit"
-            className="btn w-full bg-emerald-600 hover:bg-emerald-700 text-white"
-          >
+          {/* Submit */}
+          <button className="btn btn-success w-full text-lg mt-4">
             Create Destination
           </button>
         </form>

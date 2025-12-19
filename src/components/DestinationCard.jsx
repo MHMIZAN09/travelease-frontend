@@ -1,15 +1,14 @@
-import { Link, Navigate } from 'react-router-dom';
 import { FaLocationDot } from 'react-icons/fa6';
 import { FaClock } from 'react-icons/fa';
 import { IoIosAirplane } from 'react-icons/io';
 
-export default function DestinationCard({ destination }) {
+export default function DestinationCard({ destination, packageCount }) {
   return (
     <div className="flex flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden h-full">
       {/* Image Section */}
       <div className="relative h-64 w-full overflow-hidden">
         <img
-          src={destination.image}
+          src={destination.images?.[0] || 'https://via.placeholder.com/400x300'}
           alt={destination.name}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
@@ -20,10 +19,17 @@ export default function DestinationCard({ destination }) {
           </div>
         )}
         {/* Bottom Gradient Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-4">
-          <h2 className="text-white text-lg font-bold flex items-center">
-            <FaLocationDot className="mr-2 text-emerald-400" />
-            {destination.name}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+          <h2 className="text-white text-lg font-bold flex items-center justify-between">
+            <span className="flex items-center">
+              <FaLocationDot className="mr-2 text-emerald-400" />
+              {destination.name}
+            </span>
+            {packageCount !== undefined && (
+              <span className="bg-emerald-500 text-white text-xs px-2 py-1 rounded-md">
+                {packageCount} package{packageCount !== 1 ? 's' : ''}
+              </span>
+            )}
           </h2>
         </div>
       </div>
@@ -91,19 +97,6 @@ export default function DestinationCard({ destination }) {
               </div>
             )}
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-5 pt-3 border-t border-gray-200 flex justify-between items-center">
-          <span className="text-gray-500 text-sm font-medium">
-            {destination.packages || 0} Packages
-          </span>
-          <Link
-            to="/package"
-            className="text-emerald-600 font-semibold text-sm hover:text-emerald-700 hover:underline"
-          >
-            View Packages
-          </Link>
         </div>
       </div>
     </div>

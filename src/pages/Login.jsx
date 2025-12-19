@@ -1,17 +1,24 @@
-/* eslint-disable no-unused-vars */
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../components/provider/AuthProvider';
 import axios from 'axios';
 import loginAnimation from '../assets/Login.json';
 import Lottie from 'lottie-react';
+import { GithubAuthProvider, getAdditionalUserInfo } from 'firebase/auth';
+import { useTranslation } from 'react-i18next';
+
 export default function Login() {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
+  const [modalEmail, setModalEmail] = useState('');
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [pendingUser, setPendingUser] = useState(null);
+  const [pendingProvider, setPendingProvider] = useState(null);
+
   const {
     signInUser,
     signInWithGoogle,
@@ -20,7 +27,7 @@ export default function Login() {
   } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Handle Email/Password Login
+  // Email/Password login
   const handleLogin = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -31,81 +38,125 @@ export default function Login() {
       const result = await signInUser(email, password);
       const loggedUser = result.user;
 
-      // Check if email is verified
       if (!loggedUser.emailVerified) {
-        toast.warning('Please verify your email before logging in.');
+        toast.warning(t('loginVerifyEmail'));
         await sendVerificationEmail(loggedUser);
         return;
       }
 
-      toast.success(`Welcome back ${loggedUser.displayName || 'User'}!`);
+      toast.success(
+        t('loginWelcome', { name: loggedUser.displayName || t('loginUser') })
+      );
       navigate('/');
     } catch (error) {
-      toast.error(`Login Error: ${error.message}`);
+      toast.error(`${t('loginError')}: ${error.message}`);
     }
   };
 
-  // Social Login helper
-  const handleSocialLogin = async (provider) => {
+  // Social login
+  const handleSocialLogin = async (providerName) => {
     try {
       let result;
-
-      if (provider === 'google') {
+      if (providerName === 'google') {
         result = await signInWithGoogle();
-      } else if (provider === 'github') {
-        result = await signInWithGithub();
+      } else if (providerName === 'github') {
+        const githubProvider = new GithubAuthProvider();
+        githubProvider.addScope('user:email');
+        result = await signInWithGithub(githubProvider);
       }
 
       const user = result.user;
+      let email = user.email;
 
-      // Send to backend: create if doesn't exist
-      const res = await axios.post(
-        'https://travelease-backend.vercel.app/api/users',
-        {
-          name: user.displayName || 'No Name',
-          email: user.email,
-          uid: user.uid,
-          photoURL: user.photoURL,
-          provider: provider,
-          role: 'customer',
-        }
+      if (!email && user.providerData?.length > 0) {
+        email = user.providerData[0].email;
+      }
+
+      const additionalInfo = getAdditionalUserInfo(result);
+      if (!email && additionalInfo?.profile?.email) {
+        email = additionalInfo.profile.email;
+      }
+
+      if (!email) {
+        setPendingUser(user);
+        setPendingProvider(providerName);
+        setShowEmailModal(true);
+        return;
+      }
+
+      await saveUserToBackend(user, providerName, email);
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        `${t('loginError')}: ${error.response?.data?.message || error.message}`
       );
+    }
+  };
 
+  // Save user to backend
+  const saveUserToBackend = async (user, provider, email) => {
+    try {
+      const res = await axios.post('http://localhost:5000/api/users', {
+        name: user.displayName || t('loginNoName'),
+        email: email,
+        uid: user.uid,
+        photoURL: user.photoURL,
+        provider: provider,
+        role: 'customer',
+      });
       const loggedUser = res.data.data;
-      toast.success(`Welcome ${loggedUser.name || 'User'}!`);
+      toast.success(
+        t('loginWelcome', { name: loggedUser.name || t('loginUser') })
+      );
       navigate('/');
     } catch (error) {
       console.error(error);
       toast.error(
-        `Login Error: ${error.response?.data?.message || error.message}`
+        `${t('backendError')}: ${
+          error.response?.data?.message || error.message
+        }`
       );
+    }
+  };
+
+  // Modal submit
+  const handleModalSubmit = async (e) => {
+    e.preventDefault();
+    if (!modalEmail) {
+      toast.error(t('loginEmailRequired'));
+      return;
+    }
+    setShowEmailModal(false);
+    if (pendingUser && pendingProvider) {
+      await saveUserToBackend(pendingUser, pendingProvider, modalEmail);
+      setPendingUser(null);
+      setPendingProvider(null);
+      setModalEmail('');
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-5xl bg-base-100 shadow-xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-        {/* Left side: Lottie */}
+        {/* Lottie Animation */}
         <div className="hidden md:flex items-center justify-center bg-linear-to-br from-emerald-100 to-teal-100 p-6">
-          <Lottie animationData={loginAnimation} loop autoplay />;
+          <Lottie animationData={loginAnimation} loop autoplay />
         </div>
 
-        {/* Right side: Form */}
+        {/* Form */}
         <form onSubmit={handleLogin} className="p-8 md:p-10">
-          <h2 className="text-3xl font-bold text-center">Welcome Back</h2>
-          <p className="text-center text-gray-500 mb-6">
-            Log in to your TravelEase account
-          </p>
+          <h2 className="text-3xl font-bold text-center">{t('loginTitle')}</h2>
+          <p className="text-center text-gray-500 mb-6">{t('loginSubtitle')}</p>
 
           {/* Email */}
           <div className="form-control w-full mb-4">
-            <span className="label-text">Email</span>
+            <span className="label-text">{t('loginEmail')}</span>
             <div className="relative">
               <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <input
                 type="email"
                 name="email"
-                placeholder="your.email@example.com"
+                placeholder={t('loginEmailPlaceholder')}
                 className="input input-bordered w-full pl-12"
                 required
               />
@@ -114,13 +165,13 @@ export default function Login() {
 
           {/* Password */}
           <div className="form-control w-full mb-4">
-            <span className="label-text">Password</span>
+            <span className="label-text">{t('loginPassword')}</span>
             <div className="relative mt-1">
               <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 name="password"
-                placeholder="Enter your password"
+                placeholder={t('loginPasswordPlaceholder')}
                 className="input input-bordered w-full pl-12 pr-12"
                 required
               />
@@ -141,22 +192,21 @@ export default function Login() {
                 to="/forgot-password"
                 className="text-sm text-primary hover:underline"
               >
-                Forgot password?
+                {t('loginForgotPassword')}
               </Link>
             </div>
           </div>
 
-          {/* Sign In Button */}
           <button
             type="submit"
             className="btn w-full bg-linear-to-r from-emerald-600 to-teal-600 text-white"
           >
-            Sign In
+            {t('loginSignIn')}
           </button>
 
-          <div className="divider my-6 text-sm">Or continue with</div>
+          <div className="divider my-6 text-sm">{t('loginOrContinue')}</div>
 
-          {/* Social Buttons */}
+          {/* Social Login */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <button
               type="button"
@@ -175,16 +225,49 @@ export default function Login() {
           </div>
 
           <p className="text-center text-sm text-gray-600 mt-2">
-            Don’t have an account?{' '}
+            {t('loginNoAccount')}{' '}
             <Link
               to="/register"
               className="text-primary font-medium hover:underline"
             >
-              Sign up
+              {t('loginSignUp')}
             </Link>
           </p>
         </form>
       </div>
+
+      {/* Email Modal */}
+      {showEmailModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <form
+            onSubmit={handleModalSubmit}
+            className="bg-white p-6 rounded-lg w-96 flex flex-col gap-4"
+          >
+            <h3 className="text-lg font-bold">{t('loginModalTitle')}</h3>
+            <p className="text-sm text-gray-600">{t('loginModalSubtitle')}</p>
+            <input
+              type="email"
+              value={modalEmail}
+              onChange={(e) => setModalEmail(e.target.value)}
+              placeholder={t('loginModalPlaceholder')}
+              className="input input-bordered w-full"
+              required
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowEmailModal(false)}
+                className="btn btn-outline"
+              >
+                {t('loginModalCancel')}
+              </button>
+              <button type="submit" className="btn btn-primary">
+                {t('loginModalSubmit')}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

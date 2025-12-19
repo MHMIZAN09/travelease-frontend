@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../../components/provider/AuthProvider';
-import { toast } from 'react-toastify';
+import { Plane, DollarSign, CalendarCheck, Clock } from 'lucide-react';
 
 import {
   ResponsiveContainer,
@@ -18,62 +18,40 @@ export default function DashboardHome() {
 
   const [stats, setStats] = useState({
     totalBookings: 0,
-    upcomingTrips: 0,
-    pendingPayments: 0,
+    totalSpent: 0,
+    confirmed: 0,
+    pending: 0,
+    canceled: 0,
   });
 
-  const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user?.uid) return;
 
-    const fetchDashboardData = async () => {
+    const fetchData = async () => {
       try {
         const res = await axios.get(
-          `https://travelease-backend.vercel.app/api/bookings/user/${user.uid}`
+          `http://localhost:5000/api/bookings/user/${user._id}`
         );
 
-        const bookings = res.data.data || [];
-
-        const totalBookings = bookings.length;
-        const upcomingTrips = bookings.filter(
-          (b) => b.bookingStatus === 'confirmed'
-        ).length;
-
-        const pendingPayments = bookings.filter(
-          (b) => b.paymentStatus === 'pending'
-        ).length;
-
-        // Chart data
-        const pending = bookings.filter(
-          (b) => b.bookingStatus === 'pending'
-        ).length;
-
-        const canceled = bookings.filter(
-          (b) => b.bookingStatus === 'canceled'
-        ).length;
+        const data = res.data?.data || [];
 
         setStats({
-          totalBookings,
-          upcomingTrips,
-          pendingPayments,
+          totalBookings: data.length,
+          totalSpent: data.reduce((s, b) => s + (b.totalAmount || 0), 0),
+          confirmed: data.filter((b) => b.bookingStatus === 'confirmed').length,
+          pending: data.filter((b) => b.bookingStatus === 'pending').length,
+          canceled: data.filter((b) => b.bookingStatus === 'canceled').length,
         });
-
-        setChartData([
-          { name: 'Confirmed', value: upcomingTrips },
-          { name: 'Pending', value: pending },
-          { name: 'Canceled', value: canceled },
-        ]);
-      } catch (error) {
-        console.error(error);
-        toast.error('Failed to load dashboard data');
+      } catch (err) {
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDashboardData();
+    fetchData();
   }, [user]);
 
   if (loading) {
@@ -84,30 +62,52 @@ export default function DashboardHome() {
     );
   }
 
+  const chartData = [
+    { name: 'Confirmed', value: stats.confirmed },
+    { name: 'Pending', value: stats.pending },
+    { name: 'Canceled', value: stats.canceled },
+  ];
+
   return (
-    <>
-      <h1 className="text-3xl font-bold mb-6">Dashboard Overview</h1>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white p-6 rounded-xl shadow">
-          <p className="text-gray-500">Total Bookings</p>
-          <h2 className="text-2xl font-bold">{stats.totalBookings}</h2>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow">
-          <p className="text-gray-500">Upcoming Trips</p>
-          <h2 className="text-2xl font-bold">{stats.upcomingTrips}</h2>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow">
-          <p className="text-gray-500">Pending Payments</p>
-          <h2 className="text-2xl font-bold">{stats.pendingPayments}</h2>
-        </div>
+    <div className="space-y-10">
+      {/* Header */}
+      <div>
+        <h1 className="text-4xl font-bold text-gray-800">
+          Welcome back, {user?.displayName || 'Traveler'} ✈️
+        </h1>
+        <p className="text-gray-500 mt-2">Your booking overview at a glance</p>
       </div>
 
-      {/* Booking Status Chart */}
-      <div className="bg-white p-6 rounded-xl shadow">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          icon={<Plane />}
+          label="Total Bookings"
+          value={stats.totalBookings}
+          gradient="from-blue-500 to-indigo-600"
+        />
+        <StatCard
+          icon={<DollarSign />}
+          label="Total Spent"
+          value={`৳${stats.totalSpent.toLocaleString()}`}
+          gradient="from-purple-500 to-pink-600"
+        />
+        <StatCard
+          icon={<CalendarCheck />}
+          label="Confirmed"
+          value={stats.confirmed}
+          gradient="from-green-500 to-emerald-600"
+        />
+        <StatCard
+          icon={<Clock />}
+          label="Pending"
+          value={stats.pending}
+          gradient="from-orange-500 to-amber-600"
+        />
+      </div>
+
+      {/* Booking Status Graph */}
+      <div className="bg-white rounded-2xl p-6 shadow">
         <h2 className="text-xl font-semibold mb-4">Booking Status Overview</h2>
 
         <ResponsiveContainer width="100%" height={300}>
@@ -116,10 +116,23 @@ export default function DashboardHome() {
             <XAxis dataKey="name" />
             <YAxis allowDecimals={false} />
             <Tooltip />
-            <Bar dataKey="value" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="value" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </>
+    </div>
+  );
+}
+
+/* Reusable Stat Card */
+function StatCard({ icon, label, value, gradient }) {
+  return (
+    <div
+      className={`bg-gradient-to-r ${gradient} text-white p-6 rounded-2xl shadow-lg`}
+    >
+      <div className="mb-3">{icon}</div>
+      <p className="text-sm opacity-90">{label}</p>
+      <h2 className="text-3xl font-bold">{value}</h2>
+    </div>
   );
 }

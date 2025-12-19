@@ -30,7 +30,7 @@ export default function UserBooking() {
     const fetchBookings = async () => {
       try {
         const res = await axios.get(
-          `https://travelease-backend.vercel.app/api/bookings/user/${user.uid}`
+          `http://localhost:5000/api/bookings/user/${user._id || user.uid}`
         );
         setBookings(res.data.data || []);
       } catch (err) {
@@ -134,10 +134,10 @@ export default function UserBooking() {
                   {b.guests?.adults} Adults / {b.guests?.children} Children
                 </td>
                 <td className="px-6 py-4 font-semibold text-gray-800">
-                  BDT {b.totalPrice}
+                  BDT {b.totalAmount}
                 </td>
                 <td className="px-6 py-4">{getStatusBadge(b.bookingStatus)}</td>
-                <td className="px-6 py-4 text-gray-600">{b.notes || '-'}</td>
+                <td className="px-6 py-4 text-gray-600">{b.notes || ''}</td>
               </tr>
             ))}
           </tbody>

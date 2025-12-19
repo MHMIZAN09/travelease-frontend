@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const images = [
   'https://images.unsplash.com/photo-1658139657766-3ba1adc5a010?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
@@ -7,9 +8,12 @@ const images = [
 ];
 
 export function Hero() {
+  const { t } = useTranslation();
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Carousel effect
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -17,54 +21,65 @@ export function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  // Handle search submission
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log('Search query:', searchQuery);
-    // You can redirect or filter results based on the search query
+    if (searchQuery.trim() === '') return;
   };
 
   return (
-    <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden rounded-lg">
+    <section className="relative h-[700px] md:h-[600px] lg:h-[650px] flex items-center justify-center overflow-hidden rounded-xl">
       {/* Carousel Background */}
       <div className="absolute inset-0 z-0">
         <img
           src={images[currentIndex]}
-          alt="Hero Background"
+          alt={t('heroAlt')}
           className="w-full h-full object-cover transition-opacity duration-1000"
         />
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/40 to-black/70" />
       </div>
 
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10 text-center">
-        <div className="max-w-4xl mx-auto space-y-6">
-          <h1 className="text-white text-5xl md:text-6xl lg:text-7xl font-bold">
-            Explore Beautiful Bangladesh
+        <div className="max-w-3xl mx-auto space-y-6">
+          <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight drop-shadow-lg">
+            {t('heroTitle')}
           </h1>
-          <p className="text-xl text-[#F1F1F1] md:text-2xl max-w-2xl mx-auto">
-            From the world's longest sea beach to the Sundarbans - Discover the
-            natural wonders of Bangladesh
+          <p className="text-lg md:text-2xl text-gray-100 max-w-2xl mx-auto drop-shadow">
+            {t('heroSubtitle')}
           </p>
 
           {/* Search Form */}
           <form
             onSubmit={handleSearch}
-            className="mt-6 flex justify-center gap-2"
+            className="mt-6 flex justify-center items-center shadow-lg rounded-full overflow-hidden w-full max-w-xl mx-auto"
           >
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search destinations..."
-              className="p-3 w-80 md:w-96 rounded-l-full focus:outline-none focus:ring-2 focus:ring-emerald-400 text-white bg-black/30 placeholder-white"
+              placeholder={t('searchPlaceholder')}
+              className="flex-1 px-5 py-3 text-white bg-black/40 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
             />
             <button
               type="submit"
-              className="px-6 py-3 bg-emerald-500 text-white font-semibold rounded-r-full hover:bg-emerald-600 transition"
+              className="px-6 py-3 bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition"
             >
-              Search
+              {t('searchButton')}
             </button>
           </form>
+
+          {/* Optional: small carousel indicators */}
+          <div className="flex justify-center gap-2 mt-4">
+            {images.map((_, idx) => (
+              <span
+                key={idx}
+                className={`w-3 h-3 rounded-full transition ${
+                  currentIndex === idx ? 'bg-emerald-500' : 'bg-gray-300'
+                }`}
+              ></span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
