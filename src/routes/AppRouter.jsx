@@ -23,13 +23,15 @@ import ManageUsers from './../pages/admin/ManageUsers';
 import ManagePackages from '../pages/admin/ManagePackages';
 import ManageDestinations from '../pages/admin/ManageDestinations';
 import Booking from '../pages/BookingPage';
-import BookingSuccess from '../pages/BookingSuccess';
+import BookingSuccess from '../pages/PaymentSuccess';
 import DashboardHome from '../pages/user/DashboardHome';
 import UserDashboardLayout from '../pages/user/DashboardLayout';
 import UserPayments from '../pages/user/UserPayments';
 import AdminDashboardLayout from '../pages/admin/AdminDashboardLayout';
 import AllBookings from '../pages/admin/AllBookings';
 import ForgotPassword from '../pages/ForgotPassword';
+import PaymentCancel from '../pages/PaymentCancel';
+import PaymentSuccess from '../pages/PaymentSuccess';
 
 const route = createBrowserRouter([
   {
@@ -122,10 +124,18 @@ const route = createBrowserRouter([
         ),
       },
       {
-        path: 'booking-success/:id',
+        path: 'payment-success',
         element: (
           <PrivateRoute>
-            <BookingSuccess />
+            <PaymentSuccess />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: 'payment-cancel',
+        element: (
+          <PrivateRoute>
+            <PaymentCancel />
           </PrivateRoute>
         ),
       },
@@ -146,6 +156,10 @@ const route = createBrowserRouter([
           {
             path: 'dashboard',
             element: <AdminDashboard />,
+          },
+          {
+            path: 'admin/profile',
+            element: <UserProfile />,
           },
           {
             path: 'manageUsers',
@@ -204,6 +218,14 @@ const route = createBrowserRouter([
       {
         path: 'admin/allUsers',
         element: <AllUsers />,
+      },
+      {
+        path: 'success',
+        element: <BookingSuccess />,
+      },
+      {
+        path: 'cancel',
+        element: <BookingSuccess />,
       },
     ],
   },

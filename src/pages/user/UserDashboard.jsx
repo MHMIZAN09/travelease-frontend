@@ -16,7 +16,7 @@ export default function UserDashboard() {
     const fetchBookings = async () => {
       try {
         const res = await axios.get(
-          `https://travelease-backend.vercel.app/api/bookings/user/${user.uid}`
+          `http://localhost:5000/api/bookings/user/${user.uid}`
         );
         setBookings(res.data.data);
       } catch (err) {

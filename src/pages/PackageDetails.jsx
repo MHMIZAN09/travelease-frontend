@@ -1,279 +1,265 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Star, Users, Clock, MapPin } from 'lucide-react';
+import {
+  Star,
+  Users,
+  Clock,
+  MapPin,
+  ChevronLeft,
+  Check,
+  X,
+  MessageCircle,
+} from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 export default function PackageDetails() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [pkg, setPkg] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mainImageIndex, setMainImageIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState('description');
 
   useEffect(() => {
     const fetchPackage = async () => {
       try {
-        const res = await axios.get(
-          `https://travelease-backend.vercel.app/api/packages/${id}`
-        );
+        const res = await axios.get(`http://localhost:5000/api/packages/${id}`);
         setPkg(res.data.data);
       } catch (err) {
-        toast.error('Failed to fetch package details');
         console.error(err);
+        toast.error(t('fetchPackageError'));
       } finally {
         setLoading(false);
       }
     };
     fetchPackage();
-  }, [id]);
+  }, [id, t]);
 
-  // Auto-change main image every 4 seconds
-  useEffect(() => {
-    if (pkg?.images?.length > 1) {
-      const interval = setInterval(() => {
-        setMainImageIndex((prev) => (prev + 1) % pkg.images.length);
-      }, 4000);
-      return () => clearInterval(interval);
-    }
-  }, [pkg]);
-
-  if (loading)
+  if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-gray-500">
-        Loading...
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <span className="loading loading-spinner loading-xl text-emerald-600"></span>
       </div>
     );
+  }
 
-  if (!pkg)
+  if (!pkg) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-gray-500">
-        Package not found.
+      <div className="flex justify-center items-center min-h-screen bg-gray-50 text-xl text-gray-600">
+        {t('packageNotFound')}
       </div>
     );
+  }
 
   const durationText =
     pkg.duration?.days && pkg.duration?.nights
-      ? `${pkg.duration.days}D / ${pkg.duration.nights}N`
-      : 'N/A';
+      ? t('duration', { days: pkg.duration.days, nights: pkg.duration.nights })
+      : t('customDuration');
 
   const handleBooking = () => {
     navigate(`/booking/${pkg._id}`);
   };
 
+  const discountedPrice = pkg.discount ? pkg.price - pkg.discount : null;
+  const displayPrice = discountedPrice || pkg.price;
+
   return (
-    <div className="min-h-screen py-12 px-4 md:px-10 bg-gray-100">
-      <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
-        {/* Main Image Carousel */}
-        <div className="relative h-[500px] w-full">
-          {pkg.images?.[mainImageIndex] && (
-            <img
-              src={pkg.images[mainImageIndex]}
-              alt="Main"
-              className="w-full h-full object-cover rounded-b-xl transition-transform duration-700 ease-in-out"
-            />
-          )}
-          <div className="absolute bottom-6 left-6 bg-emerald-600 text-white px-4 py-2 rounded-xl font-semibold shadow-lg flex items-center gap-1">
-            <MapPin className="h-5 w-5" /> {pkg.destination?.name || 'Unknown'}
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="container mx-auto px-6 pt-8">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 mb-6 transition-colors"
+        >
+          <ChevronLeft className="w-6 h-6" />
+          {t('backToPackages')}
+        </button>
+
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 max-w-4xl">
+          {pkg.title}
+        </h1>
+
+        <div className="flex flex-wrap items-center gap-4 mt-6 text-gray-600">
+          <div className="flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-emerald-600" />
+            <span className="font-medium">
+              {pkg.destination?.name || t('bangladesh')}
+            </span>
           </div>
 
-          {/* Thumbnails */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3 overflow-x-auto">
-            {pkg.images.map((img, idx) => (
-              <img
+          {pkg.rating > 0 && (
+            <>
+              <span className="text-gray-400">•</span>
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                <span className="font-semibold">{pkg.rating.toFixed(1)}</span>
+                <span className="text-sm">
+                  ({t('reviews', { count: pkg.reviews?.length || 0 })})
+                </span>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Image Gallery */}
+      <div className="container mx-auto px-6 mt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="rounded-3xl overflow-hidden shadow-2xl h-96 lg:h-full">
+            <img
+              src={pkg.images?.[mainImageIndex] || pkg.images?.[0]}
+              alt={pkg.title}
+              className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            {pkg.images?.slice(0, 4).map((img, idx) => (
+              <div
                 key={idx}
-                src={img}
-                alt={`Thumbnail ${idx}`}
-                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 transition-transform duration-300 hover:scale-110 ${
-                  idx === mainImageIndex
-                    ? 'border-emerald-600 shadow-lg'
-                    : 'border-gray-200'
-                }`}
                 onClick={() => setMainImageIndex(idx)}
-              />
+                className={`relative rounded-2xl overflow-hidden h-48 cursor-pointer shadow-lg transition-all hover:shadow-xl ${
+                  idx === mainImageIndex ? 'ring-4 ring-emerald-500' : ''
+                }`}
+              >
+                <img
+                  src={img}
+                  alt={`Gallery ${idx + 1}`}
+                  className="w-full h-full object-cover"
+                />
+                {idx === 3 && pkg.images.length > 4 && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <span className="text-white text-3xl font-bold">
+                      +{pkg.images.length - 4}
+                    </span>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
 
-        {/* Package Header */}
-        <div className="p-8 space-y-6">
-          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-            <h1 className="text-4xl font-bold text-gray-800">{pkg.title}</h1>
-            <div className="flex flex-wrap items-center gap-5 mt-3 md:mt-0 text-gray-600">
-              <div className="flex items-center gap-1">
-                <Star className="h-5 w-5 text-yellow-400" /> {pkg.rating ?? 0}
-              </div>
-              <div className="flex items-center gap-1">
-                <Users className="h-5 w-5 text-emerald-500" /> {pkg.groupSize}{' '}
-                pax
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="h-5 w-5 text-emerald-500" /> {durationText}
-              </div>
-            </div>
+        {/* Quick Info Pills */}
+        <div className="flex flex-wrap gap-4 mt-10">
+          <div className="flex items-center gap-3 bg-white px-6 py-4 rounded-full shadow-md border">
+            <Clock className="w-6 h-6 text-emerald-600" />
+            <span className="font-medium">{durationText}</span>
           </div>
-
-          {/* Booking */}
-          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 p-6 bg-emerald-50 rounded-2xl shadow-inner">
-            <div className="text-4xl font-extrabold text-emerald-600">
-              ৳{pkg.price}
-            </div>
-            <button
-              onClick={handleBooking}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-semibold text-lg shadow-lg transition-transform duration-300 hover:scale-105"
-            >
-              Book Now
-            </button>
+          <div className="flex items-center gap-3 bg-white px-6 py-4 rounded-full shadow-md border">
+            <Users className="w-6 h-6 text-emerald-600" />
+            <span className="font-medium">
+              {t('groupSize', { size: pkg.groupSize })}
+            </span>
           </div>
+          <div className="flex items-center gap-3 bg-white px-6 py-4 rounded-full shadow-md border">
+            <MessageCircle className="w-6 h-6 text-emerald-600" />
+            <span className="font-medium">
+              {t('languages', { langs: 'English & Bengali' })}
+            </span>
+          </div>
+        </div>
+      </div>
 
-          {/* Tabs for Description, Itinerary, Included, Excluded */}
-          <div className="mt-8">
-            <div className="flex border-b border-gray-200">
-              {['description', 'itinerary', 'included', 'excluded'].map(
-                (tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`py-3 px-6 font-semibold text-gray-700 transition-colors ${
-                      activeTab === tab
-                        ? 'border-b-4 border-emerald-600 text-emerald-600'
-                        : 'hover:text-emerald-600'
-                    }`}
-                  >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </button>
-                )
+      {/* Main Content with Sidebar Booking Button */}
+      <div className="container mx-auto px-6 mt-16 pb-20">
+        <div className="grid lg:grid-cols-3 gap-12">
+          {/* Left: All Tour Details */}
+          <div className="lg:col-span-2 space-y-16">
+            {/* Tour Overview */}
+            <section>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                {t('tourOverview')}
+              </h2>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {pkg.description}
+              </p>
+            </section>
+
+            {/* What's Included */}
+            <section>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8">
+                {t('whatsIncluded')}
+              </h2>
+              <div className="grid md:grid-cols-2 gap-6">
+                {pkg.included?.map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-4">
+                    <Check className="w-7 h-7 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              {pkg.excluded?.length > 0 && (
+                <>
+                  <h3 className="text-2xl font-bold text-gray-900 mt-12 mb-6">
+                    {t('notIncluded')}
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {pkg.excluded.map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-4">
+                        <X className="w-7 h-7 text-red-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
               )}
-            </div>
+            </section>
 
-            <div className="mt-6 text-gray-700 space-y-6">
-              {/* Description */}
-              {activeTab === 'description' && (
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    Package Overview
-                  </h2>
-                  <p className="text-gray-700 text-lg leading-relaxed">
-                    {pkg.description}
+            {/* Itinerary */}
+            <section>
+              <h2 className="text-2xl font-bold mb-8">{t('itinerary')}</h2>
+              <div className="space-y-8">
+                {pkg.itinerary?.map((day, idx) => (
+                  <div key={idx} className="flex gap-6">
+                    <div className="flex flex-col items-center">
+                      <div className="w-4 h-4 bg-emerald-500 rounded-full"></div>
+                      {idx < pkg.itinerary.length - 1 && (
+                        <div className="w-0.5 h-full bg-gray-700 mt-2"></div>
+                      )}
+                    </div>
+                    <div className="flex-1 pb-12">
+                      <h3 className="text-xl font-semibold text-gray-700">
+                        {t('dayTitle', { day: day.day, title: day.title })}
+                      </h3>
+                      <p className="text-gray-300 mt-2">{day.details}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          {/* Right Sidebar: Booking Button + Price */}
+          <div className="lg:sticky lg:top-8 h-fit">
+            <div className="bg-white rounded-3xl shadow-2xl p-8 border">
+              <div className="text-center mb-8">
+                <p className="text-4xl font-bold text-emerald-600">
+                  ৳{displayPrice.toLocaleString()}
+                </p>
+                {discountedPrice && discountedPrice < pkg.price && (
+                  <p className="text-xl text-gray-500 line-through mt-2">
+                    ৳{pkg.price.toLocaleString()}
                   </p>
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-emerald-50 p-4 rounded-xl shadow hover:shadow-lg transition">
-                      <h3 className="font-semibold text-emerald-600 mb-1">
-                        Destination
-                      </h3>
-                      <p className="text-gray-700">{pkg.destination?.name}</p>
-                    </div>
-                    <div className="bg-emerald-50 p-4 rounded-xl shadow hover:shadow-lg transition">
-                      <h3 className="font-semibold text-emerald-600 mb-1">
-                        Duration
-                      </h3>
-                      <p className="text-gray-700">{durationText}</p>
-                    </div>
-                    <div className="bg-emerald-50 p-4 rounded-xl shadow hover:shadow-lg transition">
-                      <h3 className="font-semibold text-emerald-600 mb-1">
-                        Group Size
-                      </h3>
-                      <p className="text-gray-700">{pkg.groupSize} pax</p>
-                    </div>
-                    <div className="bg-emerald-50 p-4 rounded-xl shadow hover:shadow-lg transition">
-                      <h3 className="font-semibold text-emerald-600 mb-1">
-                        Rating
-                      </h3>
-                      <p className="text-gray-700 flex items-center gap-1">
-                        <Star className="text-yellow-400 w-5 h-5" />{' '}
-                        {pkg.rating ?? 0}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
+                )}
+                <p className="text-lg text-gray-600 mt-3">
+                  {t('startingPricePerPerson')}
+                </p>
+              </div>
 
-              {/* Itinerary */}
-              {activeTab === 'itinerary' && (
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    Itinerary
-                  </h2>
-                  <div className="space-y-3">
-                    {pkg.itinerary?.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-white p-4 rounded-xl shadow hover:shadow-lg transition"
-                      >
-                        <h3 className="font-semibold text-emerald-600">
-                          {item.title}
-                        </h3>
-                        <p className="text-gray-700 mt-1">{item.details}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <button
+                onClick={handleBooking}
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xl py-5 rounded-2xl transition shadow-lg hover:shadow-xl"
+              >
+                {t('bookNow')}
+              </button>
 
-              {/* Included */}
-              {activeTab === 'included' && (
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    What's Included
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {pkg.included?.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center gap-3 p-4 bg-white rounded-xl shadow hover:shadow-lg transition"
-                      >
-                        <svg
-                          className="w-6 h-6 text-emerald-600 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                        <p className="text-gray-700 font-medium">{item}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Excluded */}
-              {activeTab === 'excluded' && (
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    What's Not Included
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {pkg.excluded?.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center gap-3 p-4 bg-white rounded-xl shadow hover:shadow-lg transition"
-                      >
-                        <svg
-                          className="w-6 h-6 text-red-500 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                        <p className="text-gray-700 font-medium">{item}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <div className="mt-6 text-center text-sm text-gray-500">
+                <p>✓ {t('freeCancellation')}</p>
+                <p>✓ {t('bestPriceGuarantee')}</p>
+              </div>
             </div>
           </div>
         </div>

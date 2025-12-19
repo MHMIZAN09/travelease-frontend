@@ -4,11 +4,12 @@ import 'aos/dist/aos.css';
 
 import AboutSection from '../components/AboutSection';
 import { Hero } from '../components/Hero';
-import { SectionTitle } from '../components/SectionTitle';
+
 import { Newsletter } from './Newsletter';
-import { Testimonials } from './Testimonials';
+
 import TopDestinations from './TopDestinations';
-import PackagesByDestination from './PackagesByDestination';
+
+import DiscountBanner from '../components/DiscountBanner';
 
 export default function Home() {
   useEffect(() => {
@@ -20,16 +21,20 @@ export default function Home() {
       {/* Hero Section */}
       <Hero />
 
-      <div data-aos="fade-up">
+      {/* Top Destination Section */}
+      <div data-aos="fade-up" data-aos-delay="200" className="mt-8">
         <TopDestinations />
       </div>
 
-      <PackagesByDestination />
-
+      <div data-aos="fade-up" data-aos-delay="200" className="mt-16">
+        <DiscountBanner />
+      </div>
       {/* About Section */}
-      <div data-aos="fade-up" data-aos-delay="100">
+      <div data-aos="fade-up" data-aos-delay="100" className="mt-16">
         <AboutSection title="About Us" />
       </div>
+
+      {/* Destinations Section */}
 
       {/* Newsletter Section */}
       <div data-aos="fade-up" data-aos-delay="300">

@@ -4,19 +4,22 @@ import FQA from '../assets/FQA.png';
 import 'aos/dist/aos.css';
 import AOS from 'aos';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function About() {
+  const { t } = useTranslation();
+
   useEffect(() => {
     AOS.init({ duration: 1000, easing: 'ease-in-out', once: true });
   }, []);
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       {/* HERO SECTION */}
       <div data-aos="fade-down">
         <SectionTitle
-          title="About Us"
-          description="Discover TraveLease: Your Gateway to Unforgettable Journeys"
+          title={t('aboutTitle')}
+          description={t('aboutSubtitle')}
         />
       </div>
 
@@ -30,11 +33,10 @@ export default function About() {
         data-aos="zoom-in"
         className="py-24 px-6 my-16 rounded-3xl bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-xl"
       >
-        <h2 className="text-4xl font-bold mb-6">What Our Travelers Say</h2>
+        <h2 className="text-4xl font-bold mb-6">{t('testimonialTitle')}</h2>
 
         <p className="max-w-2xl mx-auto text-lg mb-10 opacity-90">
-          “TraveLease made my whole trip smooth, safe and unforgettable. Their
-          planning, support and comfort level are top-notch!”
+          {t('testimonialText')}
         </p>
 
         <div className="flex justify-center">
@@ -46,7 +48,7 @@ export default function About() {
             />
             <div>
               <h4 className="font-semibold">Ahsan Rahim</h4>
-              <p className="text-sm text-gray-500">Traveller</p>
+              <p className="text-sm text-gray-500">{t('traveller')}</p>
             </div>
           </div>
         </div>
@@ -56,34 +58,17 @@ export default function About() {
       <section data-aos="fade-up" className="py-20">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-emerald-600 mb-4">
-            Full Range of Travel Services
+            {t('faqTitle')}
           </h2>
+
           <p className="text-gray-600 max-w-xl mx-auto mb-12">
-            Get answers to the most common questions & explore how we make your
-            travel smooth and memorable.
+            {t('faqSubtitle')}
           </p>
 
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
             {/* LEFT FAQ */}
             <div className="space-y-4">
-              {[
-                {
-                  q: 'Starts the automated process.',
-                  a: 'Everything begins as soon as your booking is confirmed.',
-                },
-                {
-                  q: 'The automated process starts.',
-                  a: 'Our expert team prepares your travel step by step.',
-                },
-                {
-                  q: 'Automated process starts.',
-                  a: 'We ensure safety, comfort, and hassle-free trips.',
-                },
-                {
-                  q: 'Process the automated magic.',
-                  a: 'Experience Bangladesh like never before.',
-                },
-              ].map((faq, index) => (
+              {t('faqs', { returnObjects: true }).map((faq, index) => (
                 <div
                   key={index}
                   className="collapse collapse-plus bg-emerald-50 border border-emerald-100 rounded-xl shadow-sm"

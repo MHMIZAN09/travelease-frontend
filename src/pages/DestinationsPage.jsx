@@ -1,147 +1,303 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DestinationCard from '../components/DestinationCard';
+import PackageCard from '../components/PackageCard';
 import { toast } from 'react-toastify';
 import { SectionTitle } from '../components/SectionTitle';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { useTranslation } from 'react-i18next';
 
 export default function Destinations() {
+  const { t } = useTranslation();
+
   const [destinations, setDestinations] = useState([]);
+  const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterDivision, setFilterDivision] = useState('');
+  const [selectedDestination, setSelectedDestination] = useState(null);
+
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedDivisions, setSelectedDivisions] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [priceRange, setPriceRange] = useState([0, 50000]);
+  const [durationRange, setDurationRange] = useState([0, 10]);
+  const [sortOption, setSortOption] = useState('featured');
 
   useEffect(() => {
     AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
   }, []);
 
   useEffect(() => {
-    const fetchDestinations = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'https://travelease-backend.vercel.app/api/destinations'
-        );
-        console.log('Fetched destinations:', response.data.data);
-        setDestinations(response.data.data || []);
+        const [destRes, pkgRes] = await Promise.all([
+          axios.get('http://localhost:5000/api/destinations'),
+          axios.get('http://localhost:5000/api/packages'),
+        ]);
+        setDestinations(destRes.data.data || []);
+        setPackages(pkgRes.data.data || []);
       } catch (error) {
-        toast.error('Failed to fetch destinations. Please try again later.');
+        toast.error('Failed to fetch data');
         console.error(error);
       } finally {
         setLoading(false);
       }
     };
-    fetchDestinations();
+    fetchData();
   }, []);
-
-  const divisions = [...new Set(destinations.map((dest) => dest.division))];
-
-  const filteredDestinations = destinations.filter((dest) => {
-    const matchesSearch = dest.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesDivision = filterDivision
-      ? dest.division === filterDivision
-      : true;
-    return matchesSearch && matchesDivision;
-  });
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <span className="loading loading-spinner loading-xl text-emerald-500"></span>
+      <div className="min-h-screen flex justify-center items-center">
+        <span className="loading loading-spinner loading-xl text-orange-500"></span>
       </div>
     );
   }
 
-  if (!destinations.length) {
-    return (
-      <div className="flex flex-col justify-center items-center min-h-screen text-center p-6">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
-          alt="No destinations"
-          className="w-40 h-40 mb-4 opacity-60 animate-pulse"
-        />
-        <h2 className="text-3xl font-bold text-gray-700 mb-2">
-          No Destinations Found
-        </h2>
-        <p className="text-gray-500 max-w-md">
-          We couldn't find any destinations at the moment. Please check back
-          later or try refreshing the page.
-        </p>
-      </div>
-    );
-  }
+  const divisions = Array.from(
+    new Set(packages.map((pkg) => pkg.destination.division))
+  );
+
+  const tourTypes = Array.from(
+    new Set(packages.map((pkg) => pkg.destination.category))
+  );
+
+  const filteredPackages = selectedDestination
+    ? packages
+        .filter((pkg) => pkg.destination.name === selectedDestination.name)
+        .filter((pkg) => {
+          if (
+            selectedTypes.length > 0 &&
+            !selectedTypes.includes(pkg.destination.category)
+          )
+            return false;
+          if (
+            selectedDivisions.length > 0 &&
+            !selectedDivisions.includes(pkg.destination.division)
+          )
+            return false;
+          if (pkg.price < priceRange[0] || pkg.price > priceRange[1])
+            return false;
+          if (
+            pkg.duration.days < durationRange[0] ||
+            pkg.duration.days > durationRange[1]
+          )
+            return false;
+          if (
+            searchText &&
+            !pkg.title.toLowerCase().includes(searchText.toLowerCase()) &&
+            !pkg.destination.name
+              .toLowerCase()
+              .includes(searchText.toLowerCase())
+          )
+            return false;
+          return true;
+        })
+        .sort((a, b) => {
+          switch (sortOption) {
+            case 'price-asc':
+              return a.price - b.price;
+            case 'price-desc':
+              return b.price - a.price;
+            case 'duration-asc':
+              return a.duration.days - b.duration.days;
+            case 'duration-desc':
+              return b.duration.days - a.duration.days;
+            case 'name-asc':
+              return a.title.localeCompare(b.title);
+            case 'name-desc':
+              return b.title.localeCompare(a.title);
+            default:
+              return 0;
+          }
+        })
+    : [];
 
   return (
-    <div className="min-h-screen  p-6">
+    <div className="min-h-screen p-6">
       <SectionTitle
-        badgeText="Explore Bangladesh"
-        title="Our Destinations"
-        description="From the longest sea beach to the Sundarbans mangrove forest – discover Bangladesh's natural treasures"
+        badgeText={t('exploreBadge')}
+        title={t('ourDestinations')}
+        description={
+          selectedDestination
+            ? t('packagesIn', { name: selectedDestination.name })
+            : t('clickDestination')
+        }
       />
 
-      {/* Search & Filter Section */}
-      <div className="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4 lg:justify-center lg:gap-8">
-        <input
-          type="text"
-          placeholder="Search destinations..."
-          className="input input-bordered w-full md:w-1/3 border-emerald-400 focus:border-emerald-500 focus:ring-emerald-200 shadow-sm"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          data-aos="fade-right"
-        />
-        <select
-          className="select select-bordered w-full md:w-1/4 border-emerald-400 focus:border-emerald-500 focus:ring-emerald-200 shadow-sm"
-          value={filterDivision}
-          onChange={(e) => setFilterDivision(e.target.value)}
-          data-aos="fade-left"
-        >
-          <option value="">Filter by Division</option>
-          {divisions.map((division) => (
-            <option key={division} value={division}>
-              {division}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="mb-6 text-gray-600 text-sm">
-        Showing {filteredDestinations.length} of {destinations.length}{' '}
-        destinations
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredDestinations.length ? (
-          filteredDestinations.map((dest, index) => (
+      {!selectedDestination && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {destinations.map((destination, index) => (
             <div
-              key={dest.id || dest._id}
-              data-aos="fade-up"
-              data-aos-delay={index * 100}
+              key={index}
+              onClick={() => setSelectedDestination(destination)}
+              className="cursor-pointer"
             >
-              <DestinationCard destination={dest} />
+              <DestinationCard
+                destination={destination}
+                packageCount={
+                  packages.filter(
+                    (pkg) => pkg.destination.name === destination.name
+                  ).length
+                }
+              />
             </div>
-          ))
-        ) : (
-          <div
-            className="col-span-full flex flex-col justify-center items-center text-center p-8 bg-white rounded-lg shadow-lg"
-            data-aos="zoom-in"
-          >
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
-              alt="No results"
-              className="w-32 h-32 mb-4 opacity-50"
-            />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">
-              No destinations match your search/filter
-            </h3>
-            <p className="text-gray-500 max-w-sm">
-              Try adjusting your search or filter options to find the perfect
-              destination.
-            </p>
+          ))}
+        </div>
+      )}
+
+      {selectedDestination && (
+        <div className="flex flex-col lg:flex-row gap-8">
+          <aside className="lg:w-64 bg-white rounded-lg shadow p-6 space-y-6">
+            <button
+              className="mb-4 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
+              onClick={() => setSelectedDestination(null)}
+            >
+              {t('backToDestinations')}
+            </button>
+
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-3">
+                {t('search')}
+              </h3>
+              <input
+                type="text"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                placeholder={t('searchPackagesPlaceholder')}
+                className="input input-bordered w-full"
+              />
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-3">
+                {t('tourType')}
+              </h3>
+              <div className="space-y-2">
+                {tourTypes.map((type) => (
+                  <label
+                    key={type}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes(type)}
+                      onChange={() =>
+                        setSelectedTypes((prev) =>
+                          prev.includes(type)
+                            ? prev.filter((t) => t !== type)
+                            : [...prev, type]
+                        )
+                      }
+                      className="checkbox checkbox-sm border-gray-400"
+                    />
+                    <span className="text-gray-700">{type}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-3">
+                {t('division')}
+              </h3>
+              <div className="space-y-2">
+                {divisions.map((div) => (
+                  <label
+                    key={div}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedDivisions.includes(div)}
+                      onChange={() =>
+                        setSelectedDivisions((prev) =>
+                          prev.includes(div)
+                            ? prev.filter((d) => d !== div)
+                            : [...prev, div]
+                        )
+                      }
+                      className="checkbox checkbox-sm border-gray-400"
+                    />
+                    <span className="text-gray-700">{div}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-3">
+                {t('priceRange')}
+              </h3>
+              <input
+                type="range"
+                min="0"
+                max="50000"
+                value={priceRange[1]}
+                onChange={(e) => setPriceRange([0, Number(e.target.value)])}
+                className="range range-sm"
+              />
+              <div className="text-gray-700 mt-1">
+                {priceRange[0]} - {priceRange[1]}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-3">
+                {t('durationFilter')}
+              </h3>
+              <input
+                type="range"
+                min="1"
+                max="10"
+                value={durationRange[1]}
+                onChange={(e) => setDurationRange([0, Number(e.target.value)])}
+                className="range range-sm"
+              />
+              <div className="text-gray-700 mt-1">
+                1 - {durationRange[1]} days
+              </div>
+            </div>
+          </aside>
+
+          <div className="flex-1">
+            <div className="flex justify-between items-center mb-4">
+              <p className="text-gray-600">
+                {t('results', { count: filteredPackages.length })}
+              </p>
+              <select
+                className="select select-bordered border-gray-300"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                <option value="featured">{t('sortFeatured')}</option>
+                <option value="price-asc">{t('sortPriceAsc')}</option>
+                <option value="price-desc">{t('sortPriceDesc')}</option>
+                <option value="duration-asc">{t('sortDurationAsc')}</option>
+                <option value="duration-desc">{t('sortDurationDesc')}</option>
+                <option value="name-asc">{t('sortNameAsc')}</option>
+                <option value="name-desc">{t('sortNameDesc')}</option>
+              </select>
+            </div>
+
+            <div className="space-y-6">
+              {filteredPackages.length > 0 ? (
+                filteredPackages.map((pkg, idx) => (
+                  <div
+                    key={pkg._id}
+                    data-aos="fade-up"
+                    data-aos-delay={idx * 100}
+                  >
+                    <PackageCard pkg={pkg} />
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">{t('noPackages')}</p>
+              )}
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

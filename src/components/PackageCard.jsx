@@ -1,64 +1,133 @@
 import { useNavigate } from 'react-router-dom';
-import { Star, Users, MapPin, Clock } from 'lucide-react';
+import { Star, Clock, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function PackageCard({ pkg }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  const destinationName = pkg.destination?.name || 'Unknown';
+  const title = pkg.title || t('untitledTour');
+  const destinationName = pkg.destination?.name || t('bangladesh');
+  const shortDesc = pkg.description?.slice(0, 150);
   const durationText =
     pkg.duration?.days && pkg.duration?.nights
-      ? `${pkg.duration.days}D / ${pkg.duration.nights}N`
-      : 'N/A';
+      ? t('duration', { days: pkg.duration.days, nights: pkg.duration.nights })
+      : t('customDuration');
+  const groupSizeText = pkg.groupSize
+    ? t('groupSize', { size: pkg.groupSize })
+    : null;
+  const transportationText = pkg.transportation || null;
+  const rating = pkg.rating > 0 ? pkg.rating.toFixed(1) : null;
+  const reviewCount = pkg.reviews?.length || 0;
+
+  // Price & discount calculation
+  const originalPrice = pkg.price || 0;
+  const discountedPrice = pkg.discount ? originalPrice - pkg.discount : null;
 
   return (
-    <div className="flex flex-col bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 h-full">
+    <div className="relative flex flex-col md:flex-row bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden h-full">
       {/* Image Section */}
-      <div className="relative h-52 w-full overflow-hidden">
+      <div className="relative w-full md:w-1/3 h-64 md:h-auto overflow-hidden rounded-2xl m-5 md:mr-0">
         <img
-          src={pkg.images?.[0] || 'https://via.placeholder.com/400x300'}
-          alt={pkg.title || 'Package'}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          src={pkg.images?.[0]}
+          alt={title}
+          className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
         />
-        <div className="absolute top-3 right-3 bg-yellow-400 text-white px-2 py-1 rounded-md flex items-center gap-1 text-xs font-semibold shadow-md">
-          <Star className="h-3 w-3" /> {pkg.rating ?? 0}
-        </div>
+        {/* Discount Badge */}
+        {discountedPrice && (
+          <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 rounded-lg font-bold shadow-lg">
+            {t('save', { amount: pkg.discount })}
+          </div>
+        )}
+        {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
       </div>
 
-      {/* Card Body */}
-      <div className="flex-1 p-4 flex flex-col justify-between">
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold text-gray-800">
-            {pkg.title || 'Untitled Package'}
-          </h3>
-          <p className="text-gray-500 text-xs flex items-center gap-1">
-            <MapPin className="h-3 w-3 text-emerald-500" /> {destinationName}
-          </p>
-          <p className="text-gray-400 text-xs">
-            {pkg.reviews?.length ?? 0} reviews
+      {/* Content Section */}
+      <div className="flex-1 p-8 flex flex-col justify-between">
+        <div>
+          {/* Destination */}
+          <p className="text-sm text-gray-500 font-medium mb-2">
+            {destinationName} • {t('bangladesh')}
           </p>
 
-          <div className="flex items-center gap-3 mt-2">
-            <div className="flex items-center gap-1 text-gray-500 text-xs">
-              <Clock className="h-3 w-3 text-emerald-500" /> {durationText}
+          {/* Title */}
+          <h3 className="text-2xl font-bold text-gray-800 mb-4 line-clamp-2">
+            {title}
+          </h3>
+
+          {/* Short Description */}
+          <p className="text-gray-600 text-base mb-6 line-clamp-3">
+            {shortDesc}
+          </p>
+
+          {/* Icons Row: Duration, Group Size, Transport */}
+          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-700 mb-6">
+            <div className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-emerald-600" />
+              <span>{durationText}</span>
             </div>
-            {pkg.maxPeople && (
-              <div className="flex items-center gap-1 text-gray-500 text-xs">
-                <Users className="h-3 w-3 text-emerald-500" /> {pkg.maxPeople}{' '}
-                pax
+            {groupSizeText && (
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-emerald-600" />
+                <span>{groupSizeText}</span>
               </div>
             )}
+            {transportationText && (
+              <span className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium">
+                {transportationText}
+              </span>
+            )}
+          </div>
+
+          {/* Rating */}
+          {rating && (
+            <div className="flex items-center gap-2 mb-6">
+              <div className="flex items-center bg-orange-100 px-3 py-1 rounded-full">
+                <Star className="h-5 w-5 fill-orange-500 text-orange-500" />
+                <span className="ml-1 font-bold text-orange-600">{rating}</span>
+              </div>
+              <span className="text-gray-600 text-sm">
+                ({t('reviews', { count: reviewCount })})
+              </span>
+            </div>
+          )}
+
+          {/* Badges */}
+          <div className="flex items-center gap-4 text-sm">
+            <span className="text-green-700 font-semibold">
+              {t('bestPriceGuarantee')}
+            </span>
+            <span className="text-gray-400">•</span>
+            <span className="text-green-700 font-semibold">
+              {t('freeCancellation')}
+            </span>
           </div>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-gray-200 flex items-center justify-between">
-          <div className="text-emerald-600 font-bold text-lg">
-            ৳{pkg.discountedPrice ?? pkg.price ?? 'N/A'}
+        {/* Bottom: Price + Button */}
+        <div className="mt-8 flex items-end justify-between">
+          <div>
+            <p className="text-sm text-gray-500">{t('startingFrom')}</p>
+            <p className="text-4xl font-bold text-emerald-600 flex items-center gap-3">
+              {discountedPrice ? (
+                <>
+                  <span>৳{discountedPrice}</span>
+                  <span className="text-gray-400 text-xl line-through">
+                    ৳{originalPrice}
+                  </span>
+                </>
+              ) : (
+                <span>৳{originalPrice}</span>
+              )}
+            </p>
           </div>
+
           <button
             onClick={() => navigate(`/packages/${pkg._id}`)}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+            className="btn btn-outline btn-emerald hover:bg-emerald-600 hover:text-white cursor-pointer border-emerald-500 border-2 text-emerald-600 font-semibold px-6 py-3 rounded-lg transition-all duration-300"
           >
-            Details
+            {t('viewDetails')}
           </button>
         </div>
       </div>

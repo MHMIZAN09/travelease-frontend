@@ -14,13 +14,13 @@ export default function DestinationPackages() {
     const fetchPackages = async () => {
       try {
         const res = await axios.get(
-          `https://travelease-backend.vercel.app/api/packages?destination=${id}`
+          `http://localhost:5000/api/packages?destination=${id}`
         );
         setPackages(res.data.data || []);
 
         // Fetch destination details
         const destRes = await axios.get(
-          `https://travelease-backend.vercel.app/api/destinations/${id}`
+          `http://localhost:5000/api/destinations/${id}`
         );
         setDestination(destRes.data.data);
       } catch (error) {

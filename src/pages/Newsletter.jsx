@@ -1,44 +1,53 @@
 import { Mail } from 'lucide-react';
 import newsletterImage from '../assets/news.png';
+import { useTranslation } from 'react-i18next';
 
 export function Newsletter() {
+  const { t } = useTranslation();
+
   return (
     <section
-      className="py-20 bg-cover bg-center relative"
-      style={{ backgroundImage: `url(${newsletterImage})` }}
+      className="relative py-16 md:py-20"
+      style={{
+        backgroundImage: `url(${newsletterImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
-      {/* Overlay for better text visibility */}
+      {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-80"></div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="card max-w-4xl mx-auto p-8 md:p-12 bg-white/80 backdrop-blur shadow-lg text-center space-y-6">
-          <div className="w-16 h-16 mx-auto bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full flex items-center justify-center">
-            <Mail className="h-8 w-8 text-white" />
+        <div className="max-w-4xl mx-auto p-8 md:p-16 bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl hover:shadow-3xl transition-shadow duration-500 text-center space-y-6">
+          {/* Icon */}
+          <div className="w-16 h-16 mx-auto bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full flex items-center justify-center shadow-lg transform transition-transform duration-300 hover:scale-110">
+            <Mail className="w-8 h-8 text-white" />
           </div>
 
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-            Stay Updated with Bangladesh Tours
+          {/* Heading */}
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800">
+            {t('newsletterTitle')}
           </h2>
 
-          <p className="text-gray-700 max-w-2xl mx-auto">
-            Get exclusive Bangladesh tour deals, seasonal offers, and travel
-            tips delivered to your inbox.
+          {/* Description */}
+          <p className="text-gray-700 text-lg md:text-xl max-w-2xl mx-auto">
+            {t('newsletterDesc')}
           </p>
 
+          {/* Input + Button */}
           <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input
               type="email"
-              placeholder="Enter your email address"
-              className="input input-bordered flex-1"
+              placeholder={t('newsletterPlaceholder')}
+              className="flex-1 input input-bordered rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none focus:shadow-md transition"
             />
-            <button className="btn bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-0">
-              Subscribe
+            <button className="btn bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-0 rounded-lg hover:scale-105 hover:shadow-xl transition-transform duration-300">
+              {t('newsletterButton')}
             </button>
           </div>
 
-          <p className="text-sm text-gray-600">
-            We respect your privacy. Unsubscribe at any time.
-          </p>
+          {/* Footer note */}
+          <p className="text-sm text-gray-600">{t('newsletterFooter')}</p>
         </div>
       </div>
     </section>

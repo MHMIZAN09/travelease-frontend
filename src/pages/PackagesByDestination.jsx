@@ -10,9 +10,7 @@ export default function PackagesByDestination() {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const res = await axios.get(
-          'https://travelease-backend.vercel.app/api/packages'
-        );
+        const res = await axios.get('http://localhost:5000/api/packages');
         if (res.data.success) {
           // Sort by rating and take top 6 packages
           const topPackages = res.data.data

@@ -6,6 +6,7 @@ import {
   FaHome,
   FaBoxOpen,
   FaMapMarkedAlt,
+  FaUser,
 } from 'react-icons/fa';
 
 export default function AdminDashboardLayout() {
@@ -27,6 +28,9 @@ export default function AdminDashboardLayout() {
         <nav className="space-y-4">
           <NavLink to="/admin/dashboard" className={linkClass}>
             <FaHome /> Dashboard
+          </NavLink>
+          <NavLink to="admin/profile" className={linkClass}>
+            <FaUser /> Profile
           </NavLink>
 
           <NavLink to="/admin/manageUsers" className={linkClass}>
@@ -51,10 +55,6 @@ export default function AdminDashboardLayout() {
 
           <NavLink to="/admin/bookings" className={linkClass}>
             <FaSuitcaseRolling /> Bookings
-          </NavLink>
-
-          <NavLink to="/admin/payments" className={linkClass}>
-            <FaCreditCard /> Payments
           </NavLink>
         </nav>
       </aside>

@@ -1,6 +1,6 @@
 export function SectionTitle({ badgeText, title, description }) {
   return (
-    <div className="text-center max-w-3xl mx-auto my-16 px-4">
+    <div className="text-center max-w-3xl mx-auto my-2 px-5">
       {badgeText && (
         <span className="inline-block mb-4 px-4 py-1 text-sm font-semibold text-emerald-800 bg-emerald-100 rounded-full shadow-md uppercase tracking-wide">
           {badgeText}

@@ -5,27 +5,25 @@ import { AuthContext } from './provider/AuthProvider';
 
 export default function PackageForm() {
   const { user } = useContext(AuthContext);
+
   const [destinations, setDestinations] = useState([]);
-  const [uploadedImages, setUploadedImages] = useState([]); // store imgBB URLs
+  const [uploadedImages, setUploadedImages] = useState([]);
   const [uploading, setUploading] = useState(false);
 
   const imgbbApiKey = '92e1c9de53c667fa27340a69930020cb';
-  // Fetch destinations
+
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        const res = await axios.get(
-          'https://travelease-backend.vercel.app/api/destinations'
-        );
-        setDestinations(res.data.data);
-      } catch (err) {
-        console.error('Error fetching destinations:', err);
+        const res = await axios.get('http://localhost:5000/api/destinations');
+        setDestinations(res.data.data || []);
+      } catch {
+        toast.error('Failed to load destinations');
       }
     };
     fetchDestinations();
   }, []);
 
-  // Handle image upload to imgBB
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
@@ -33,22 +31,18 @@ export default function PackageForm() {
     setUploading(true);
     try {
       const urls = [];
-
-      for (let file of files) {
+      for (const file of files) {
         const formData = new FormData();
         formData.append('image', file);
-
         const res = await axios.post(
           `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`,
           formData
         );
         urls.push(res.data.data.url);
       }
-
       setUploadedImages((prev) => [...prev, ...urls]);
-      toast.success('Images uploaded successfully!');
-    } catch (err) {
-      console.error(err);
+      toast.success('Images uploaded!');
+    } catch {
       toast.error('Image upload failed');
     } finally {
       setUploading(false);
@@ -74,16 +68,19 @@ export default function PackageForm() {
       title: form.title.value,
       description: form.description.value,
       price: Number(form.price.value),
-      durationDays: Number(form.days.value),
-      durationNights: Number(form.nights.value),
+      discount: Number(form.discount.value) || 0, // Added discount
+      duration: {
+        days: Number(form.days.value),
+        nights: Number(form.nights.value),
+      },
       destination: form.destination.value,
-      images: uploadedImages, // use uploaded images from imgBB
+      images: uploadedImages,
       itinerary: itineraryArray,
       included: form.included.value
-        ? form.included.value.split(',').map((item) => item.trim())
+        ? form.included.value.split(',').map((i) => i.trim())
         : [],
       excluded: form.excluded.value
-        ? form.excluded.value.split(',').map((item) => item.trim())
+        ? form.excluded.value.split(',').map((i) => i.trim())
         : [],
       groupSize: Number(form.groupSize.value) || 20,
       transportation: form.transportation.value,
@@ -91,150 +88,211 @@ export default function PackageForm() {
     };
 
     try {
-      const res = await axios.post(
-        'https://travelease-backend.vercel.app/api/packages',
-        payload
-      );
+      await axios.post('http://localhost:5000/api/packages', payload);
       toast.success('Package created successfully!');
       form.reset();
       setUploadedImages([]);
-      console.log('Created package:', res.data);
-    } catch (err) {
-      console.error(
-        'Error creating package:',
-        err.response?.data || err.message
-      );
-      toast.error('Failed to create package.');
+    } catch {
+      toast.error('Failed to create package');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-xl rounded-xl overflow-hidden max-w-5xl w-full p-8">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <h2 className="text-2xl font-bold mb-4">Create Package</h2>
+    <div className="min-h-screen py-12 px-4 ">
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+        <h2 className="text-3xl font-bold text-center mb-8 text-emerald-600">
+          Create Travel Package
+        </h2>
 
-          <input
-            name="title"
-            type="text"
-            placeholder="Package Title"
-            className="input input-bordered w-full"
-            required
-          />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Package Info */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="label">Package Title</label>
+              <input
+                name="title"
+                placeholder="e.g. Cox's Bazar Premium Tour"
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
 
-          <select
-            name="destination"
-            className="input input-bordered w-full"
-            required
-          >
-            <option value="">Select Destination</option>
-            {destinations.map((d) => (
-              <option key={d._id} value={d._id}>
-                {d.name}
-              </option>
-            ))}
-          </select>
+            <div>
+              <label className="label">Destination</label>
+              <select
+                name="destination"
+                className="select select-bordered w-full"
+                required
+              >
+                <option value="">Select destination</option>
+                {destinations.map((d) => (
+                  <option key={d._id} value={d._id}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-          {/* Image Upload */}
+          {/* Images */}
           <div>
-            <label className="block mb-2 font-medium">Upload Images</label>
+            <label className="label">Package Images</label>
             <input
               type="file"
               accept="image/*"
               multiple
               onChange={handleImageUpload}
-              className="input input-bordered w-full"
+              className="file-input file-input-bordered w-full"
+              disabled={uploading}
+              required
             />
             {uploading && (
-              <p className="text-sm text-gray-500 mt-1">Uploading...</p>
+              <p className="text-sm text-gray-500 mt-1">Uploading images…</p>
             )}
-            <div className="flex flex-wrap mt-2 gap-2">
+            <div className="flex gap-3 mt-3 flex-wrap">
               {uploadedImages.map((url, idx) => (
                 <img
                   key={idx}
                   src={url}
-                  alt={`Package ${idx}`}
-                  className="w-24 h-24 object-cover rounded-lg shadow"
+                  alt="Preview"
+                  className="w-24 h-24 rounded-lg object-cover shadow"
                 />
               ))}
             </div>
           </div>
 
-          <input
-            name="price"
-            type="number"
-            placeholder="Price"
-            className="input input-bordered w-full"
-            required
-          />
+          {/* Price, Discount & Duration */}
+          <div className="grid md:grid-cols-4 gap-6">
+            <div>
+              <label className="label">Price (BDT)</label>
+              <input
+                name="price"
+                type="number"
+                placeholder="e.g. 15000"
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
 
-          <div className="flex gap-4">
-            <input
-              name="days"
-              type="number"
-              placeholder="Days"
-              className="input input-bordered w-1/2"
-              required
-            />
-            <input
-              name="nights"
-              type="number"
-              placeholder="Nights"
-              className="input input-bordered w-1/2"
+            <div>
+              <label className="label">Discount (%)</label>
+              <input
+                name="discount"
+                type="number"
+                placeholder="e.g. 10"
+                min="0"
+                max="100"
+                className="input input-bordered w-full"
+                defaultValue={0}
+              />
+            </div>
+
+            <div>
+              <label className="label">Days</label>
+              <input
+                name="days"
+                type="number"
+                placeholder="e.g. 3"
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="label">Nights</label>
+              <input
+                name="nights"
+                type="number"
+                placeholder="e.g. 2"
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="label">Description</label>
+            <textarea
+              name="description"
+              rows={3}
+              placeholder="Short overview of the package"
+              className="textarea textarea-bordered w-full"
               required
             />
           </div>
 
-          <textarea
-            name="description"
-            placeholder="Description"
-            className="textarea textarea-bordered w-full"
-            rows={3}
-            required
-          />
+          {/* Itinerary */}
+          <div>
+            <label className="label">
+              Itinerary{' '}
+              <span className="text-xs text-gray-400">(Day|Details)</span>
+            </label>
+            <textarea
+              name="itinerary"
+              rows={4}
+              placeholder={`Day 1 | Arrival & sightseeing\nDay 2 | Beach tour`}
+              className="textarea textarea-bordered w-full"
+              required
+            />
+          </div>
 
-          <textarea
-            name="itinerary"
-            placeholder="Itinerary (one per line: Title|Details)"
-            className="textarea textarea-bordered w-full"
-            rows={4}
-          />
+          {/* Included / Excluded */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="label">Included</label>
+              <input
+                name="included"
+                placeholder="Hotel, Breakfast, Guide"
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
 
-          <input
-            name="included"
-            type="text"
-            placeholder="Included Items (comma separated)"
-            className="input input-bordered w-full"
-          />
+            <div>
+              <label className="label">Excluded</label>
+              <input
+                name="excluded"
+                placeholder="Lunch, Personal expenses"
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
+          </div>
 
-          <input
-            name="excluded"
-            type="text"
-            placeholder="Excluded Items (comma separated)"
-            className="input input-bordered w-full"
-          />
+          {/* Group & Transport */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="label">Group Size</label>
+              <input
+                name="groupSize"
+                type="number"
+                placeholder="e.g. 20"
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
 
-          <input
-            name="groupSize"
-            type="number"
-            placeholder="Group Size"
-            className="input input-bordered w-full"
-          />
+            <div>
+              <label className="label">Transportation</label>
+              <select
+                name="transportation"
+                className="select select-bordered w-full"
+                defaultValue="AC Bus"
+                required
+              >
+                <option>AC Bus</option>
+                <option>Non-AC Bus</option>
+                <option>Train</option>
+                <option>Flight</option>
+                <option>Ship</option>
+                <option>Car</option>
+              </select>
+            </div>
+          </div>
 
-          <select
-            name="transportation"
-            className="input input-bordered w-full"
-            defaultValue="AC Bus"
-          >
-            <option value="AC Bus">AC Bus</option>
-            <option value="Non-AC Bus">Non-AC Bus</option>
-            <option value="Train">Train</option>
-            <option value="Flight">Flight</option>
-            <option value="Ship">Ship</option>
-            <option value="Car">Car</option>
-          </select>
-
-          <button type="submit" className="btn btn-success w-full text-white">
+          {/* Submit */}
+          <button className="btn btn-success w-full text-lg mt-4">
             Create Package
           </button>
         </form>
