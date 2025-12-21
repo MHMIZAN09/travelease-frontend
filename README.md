@@ -1,20 +1,104 @@
-# React + Vite
+# 🌍 TravelEase
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TravelEase is a full-stack travel booking web application designed to make travel planning simple, fast, and secure.  
+Users can explore travel packages, book trips, make online payments, and share reviews, while admins can efficiently manage packages, users, and bookings.
 
-Currently, two official plugins are available:
+This project demonstrates practical use of modern web technologies, clean architecture, and real-world features such as authentication, payments, dashboards, and role-based access.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 📌 Project Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Project Name:** TravelEase
+- **Type:** Full-Stack Web Application
+- **Frontend:** React + Vite
+- **Backend:** Node.js + Express
+- **Database:** MongoDB
+- **Payment Gateway:** Stripe
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Tech Stack
 
+### Frontend
+- React.js
+- Vite (Fast development & HMR)
+- Tailwind CSS
+- React Router DOM
+- Axios
+- Lucide React / React Icons
+- Recharts (for dashboard charts)
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- Stripe API
+
+---
+
+## ✨ Core Features
+
+### 👤 User Features
+- User registration & login (JWT authentication)
+- Browse all travel packages
+- View detailed package information
+- Book travel packages
+- Secure payment using Stripe
+- View booking history
+- Submit package reviews
+- User dashboard with:
+  - Total bookings
+  - Total amount spent
+  - Payment status overview
+
+### 🛠️ Admin Features
+- Admin authentication
+- Add, update, and delete travel packages
+- View and manage users
+- View all bookings
+- Monitor payment status
+- Review moderation
+
+---
+
+## ⚡ React + Vite Setup
+
+This project is built using **React with Vite**, providing:
+- Fast development server
+- Hot Module Replacement (HMR)
+- Optimized production builds
+
+### Official Vite Plugins Used
+- `@vitejs/plugin-react` – Uses Babel for Fast Refresh  
+- `@vitejs/plugin-react-swc` – Uses SWC for faster builds  
+
+> ℹ️ React Compiler is not enabled by default due to its impact on development and build performance.
+
+---
+
+## 🧹 ESLint Configuration
+
+Basic ESLint rules are enabled for maintaining code quality.
+
+For production-level applications, it is recommended to:
+- Use **TypeScript**
+- Enable **type-aware linting**
+- Integrate `typescript-eslint`
+
+---
+
+## 📦 Installation & Setup
+
+### 1️⃣ Clone the Repositories
+
+#### Frontend
+```bash
+git clone https://github.com/MHMIZAN09/travelease-frontend
+cd travelease-frontend
+```
 ## Live Links
 
 - **Frontend:** [TravelEase Frontend](https://travelease-frontend.vercel.app/)
